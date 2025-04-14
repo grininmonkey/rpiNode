@@ -5,8 +5,10 @@ set -e
 declare -A FILE_MAP=(
     [main.c]=main.o
     [utils/sleepMs.c]=sleepMs.o
+    [utils/readFile.c]=readFile.o
     [local/db/initDB.c]=initDB.o
     [utils/setTmpfs.c]=setTmpfs.o
+    [utils/strReplace.c]=strReplace.o
     [local/db/saveTags.c]=saveTags.o
     [utils/updateTags.c]=updateTags.o
     [local/db/writeToDB.c]=writeToDB.o
