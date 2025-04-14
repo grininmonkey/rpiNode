@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ "$1" == "mem" ]; then
+    sudo valgrind --suppressions=valgrind.supp ../rpiNode
+else
+    sudo ../rpiNode
+fi
