@@ -1,0 +1,51 @@
+#!/bin/bash
+set -e
+
+# Map source files to desired object files
+declare -A FILE_MAP=(
+    [main.c]=main.o
+    [utils/sleepMs.c]=sleepMs.o
+    [local/db/initDB.c]=initDB.o
+    [utils/setTmpfs.c]=setTmpfs.o
+    [local/db/saveTags.c]=saveTags.o
+    [utils/updateTags.c]=updateTags.o
+    [local/db/writeToDB.c]=writeToDB.o
+    [utils/getTimeStamp.c]=getTimeStamp.o
+    [network/http/serveHttp.c]=serveHttp.o
+    [utils/signalHandler.c]=signalHandler.o
+    [utils/getLineFromCmd.c]=getLineFromCmd.o
+    [utils/getLocalIPList.c]=getLocalIPList.o
+    [sensors/DS18B20/readSlave.c]=readSlave.o
+    [config/readConfigFile.c]=readConfigFile.o
+    [network/mDNS/mDnsService.c]=mDnsService.o
+    [network/http/routeRequest.c]=routeRequest.o
+    [sensors/MPU6050/readMPU6050.c]=readMPU6050.o
+    [sensors/MPU6050/assignValues.c]=assignValues.o
+    [sensors/DS18B20/readDS18B20.c]=readDS18B20.o
+    [network/http/answerConnection.c]=answerConnection.o
+    [sensors/MPU6050/calculateAngles.c]=calculateAngles.o
+    [sensors/DS18B20/scanForW1Devices.c]=scanForW1Devices.o
+    [sensors/MPU6050/smoothingMovingAverage.c]=smoothingMovingAverage.o
+)
+
+OBJ_FILES=()
+
+echo "Compiling source files..."
+
+for src in "${!FILE_MAP[@]}"; do
+    obj="${FILE_MAP[$src]}"
+    gcc -c -g -Wall "$src" -o "$obj" $(pkg-config --cflags avahi-client)  # Include CFLAGS if needed
+    OBJ_FILES+=("$obj")
+done
+
+echo "Linking..."
+gcc "${OBJ_FILES[@]}" -o ../rpiNode \
+     -g -Wall -pthread -lsqlite3 -lmicrohttpd -ljansson \
+    $(pkg-config --cflags --libs avahi-client) -lm
+
+echo "Cleaning up..."
+
+rm -f *.o
+find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.txt" \) -exec chmod -x {} +
+
+echo "Build complete!"

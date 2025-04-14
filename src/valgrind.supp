@@ -1,0 +1,29 @@
+{
+   likely_from_jansson
+   Memcheck:Addr8
+   obj:/usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+}
+
+{
+   likely_from_avahi_dbus_malloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:dbus_malloc
+}
+
+{
+   likely_from_avahi_dbus_malloc0
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:dbus_malloc0
+}
+
+{
+   likely_from_avahi_dbus_realloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:dbus_realloc
+}
