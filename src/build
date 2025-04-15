@@ -5,11 +5,15 @@ cd "$(dirname "$0")"
 
 # Initial setup
 if [[ "$1" == "install" ]]; then
+    uuid=$(python3 -c "import uuid; print(uuid.uuid4())")
     sudo xargs -a ../packages.txt apt install -y
     sudo mkdir -p /etc/rpiNode
     sudo mkdir -p /srv/rpiNode
     sudo mkdir -p /srv/rpiNode/html
     sudo cp -v ../html/*.* /srv/rpiNode/html/
+    if [ ! -f "/etc/rpiNode/config.json" ]; then
+        sudo sed -i "s/rpiNode-id-notset/$uuid/g" /etc/rpiNode/config.json
+    fi    
 fi
 
 # -- tmp for development use --

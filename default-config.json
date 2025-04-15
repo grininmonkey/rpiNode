@@ -1,0 +1,23 @@
+{
+    "id": "rpiNode-id-notset",
+    "http": 1,
+    "httpPort": 80,
+    "mDNS": 1,
+    "master": 0,
+    "saveToDB": 0,
+    "currentValuesDBName": "current",
+    "currentValuesViewName": "vValues",
+    "useTmpfs": 0,
+    "tmpfsSize": 5,
+    "tmpfsFolderName": "tmpfs",
+    "broadcast": 1,
+    "broadcastPort": 8888,
+    "broadcastIP": "255.255.255.255",
+    "updateDBSeconds": 2,
+    "internal": {
+        "MPU6050": 0,
+        "MPU6050scanMilliseconds": 400,
+        "DS18B20": 0,
+        "DS18B20scanSeconds": 5
+    }
+}
