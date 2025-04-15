@@ -84,7 +84,7 @@ gcc "${OBJ_FILES[@]}" -o ../rpiNode $LDFLAGS
 
 echo "Cleaning up..."
 rm -f *.o
-find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.txt" \) -exec chmod -x {} +
+find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.txt" -o -name "*.json" \) -exec chmod -x {} +
 
 echo "Build complete!"
 
