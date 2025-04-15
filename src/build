@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+# Check for "debug" argument
+CFLAGS="-Wall"
+LDFLAGS="-Wall -pthread -lsqlite3 -lmicrohttpd -ljansson $(pkg-config --cflags --libs avahi-client) -lm"
+
+if [[ "$1" == "debug" ]]; then
+    echo "Debug mode enabled"
+    CFLAGS="$CFLAGS -g"
+    LDFLAGS="-g $LDFLAGS"
+fi
+
 # Map source files to desired object files
 declare -A FILE_MAP=(
     [main.c]=main.o
@@ -39,17 +49,14 @@ echo "Compiling source files..."
 
 for src in "${!FILE_MAP[@]}"; do
     obj="${FILE_MAP[$src]}"
-    gcc -c -g -Wall "$src" -o "$obj" $(pkg-config --cflags avahi-client)  # Include CFLAGS if needed
+    gcc -c $CFLAGS "$src" -o "$obj" $(pkg-config --cflags avahi-client)
     OBJ_FILES+=("$obj")
 done
 
 echo "Linking..."
-gcc "${OBJ_FILES[@]}" -o ../rpiNode \
-     -g -Wall -pthread -lsqlite3 -lmicrohttpd -ljansson \
-    $(pkg-config --cflags --libs avahi-client) -lm
+gcc "${OBJ_FILES[@]}" -o ../rpiNode $LDFLAGS
 
 echo "Cleaning up..."
-
 rm -f *.o
 find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.txt" \) -exec chmod -x {} +
 
