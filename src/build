@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+if [[ "$1" == "install" ]]; then
+    sudo xargs -a ../packages.txt apt install -y
+fi
+
 # Check for "debug" argument
 CFLAGS="-Wall"
 LDFLAGS="-Wall -pthread -lsqlite3 -lmicrohttpd -ljansson $(pkg-config --cflags --libs avahi-client) -lm"
