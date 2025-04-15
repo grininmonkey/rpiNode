@@ -3,6 +3,6 @@
 
 #include <microhttpd.h>
 
-int queue_error_response(struct MHD_Connection *connection, char *error_msg);
+int queue_error_response(struct MHD_Connection *connection, char *error_msg, unsigned int status_code);
 
 #endif

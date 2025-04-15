@@ -1,29 +1,55 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
-char *str_replace(const char *orig, const char *rep, const char *with) {
-    char *result, *ins, *tmp;
-    size_t len_rep, len_with, len_front, count;
+char *str_replace(const char *input, const char *placeholder, const char *replacement) {
+    size_t input_len = strlen(input);
+    size_t placeholder_len = strlen(placeholder);
+    size_t replacement_len = strlen(replacement);
 
-    if (!orig || !rep || !with) return NULL;
-
-    len_rep = strlen(rep);
-    len_with = strlen(with);
-    ins = (char *)orig;
-    for (count = 0; (tmp = strstr(ins, rep)); ++count) {
-        ins = tmp + len_rep;
+    // Count occurrences
+    int count = 0;
+    const char *p = input;
+    while ((p = strstr(p, placeholder)) != NULL) {
+        count++;
+        p += placeholder_len;
     }
 
-    tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
+    size_t new_len = input_len + count * (replacement_len - placeholder_len);
+    char *result = malloc(new_len + 1);
     if (!result) return NULL;
 
-    while (count--) {
-        ins = strstr(orig, rep);
-        len_front = ins - orig;
-        tmp = memcpy(tmp, orig, len_front) + len_front;
-        tmp = memcpy(tmp, with, len_with) + len_with;
-        orig += len_front + len_rep;
+    const char *src = input;
+    char *dst = result;
+
+    while ((p = strstr(src, placeholder)) != NULL) {
+        size_t bytes = p - src;
+        memcpy(dst, src, bytes);
+        dst += bytes;
+        memcpy(dst, replacement, replacement_len);
+        dst += replacement_len;
+        src = p + placeholder_len;
     }
-    strcpy(tmp, orig);
+
+    strcpy(dst, src);
+    return result;
+}
+
+char *str_replace_pairs(const char *input, int num_pairs, ...) {
+    va_list args;
+    va_start(args, num_pairs);
+
+    char *result = strdup(input);
+    if (!result) return NULL;
+
+    for (int i = 0; i < num_pairs; ++i) {
+        const char *key = va_arg(args, const char *);
+        const char *val = va_arg(args, const char *);
+        char *temp = str_replace(result, key, val);
+        free(result);
+        result = temp;
+    }
+
+    va_end(args);
     return result;
 }
