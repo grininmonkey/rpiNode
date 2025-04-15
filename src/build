@@ -19,7 +19,7 @@ if [[ "$1" == "install" ]]; then
     fi    
     sudo cp -v ../default-config.json /etc/rpiNode/config.json
     sudo sed -i "s/rpiNode-id-notset/$uuid/g" /etc/rpiNode/config.json
-    echo "\n\n"
+    echo -e "\n"
 fi
 
 # -- tmp for development use --
@@ -93,7 +93,7 @@ rm -f *.o
 find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.txt" \) -exec chmod -x {} +
 
 echo "Build complete!"
-echo "\n\n"
+echo -e "\n"
 
 #---------------------------------------
 # TO-BE REMOVED Soon TM ----------------
