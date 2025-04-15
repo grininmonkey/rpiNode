@@ -11,7 +11,7 @@ if [[ "$1" == "install" ]]; then
     sudo mkdir -p /srv/rpiNode
     sudo mkdir -p /srv/rpiNode/html
     sudo cp -v ../html/*.* /srv/rpiNode/html/
-    sudo cp -v ../default-config.json /etc/rpiNode/
+    sudo cp -v ../default-config.json /etc/rpiNode/config.json
     if [ ! -f "/etc/rpiNode/config.json" ]; then
         sudo sed -i "s/rpiNode-id-notset/$uuid/g" /etc/rpiNode/config.json
     fi    
