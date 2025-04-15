@@ -1,10 +1,14 @@
+#include <stdio.h>
 #include <string.h>
 #include "routeRequest.h"
+#include "queueErrorResponse.h"
 //-----------------------------------------------------
 //#include "handlers/values.h"
 #include "handlers/handleStatus.h"  
 #include "handlers/handleFile.h"
 //-----------------------------------------------------
+
+// TODO: base filename path as a define somewhere
 
 int route_request(const char *url, struct MHD_Connection *connection) {
 
@@ -12,14 +16,18 @@ int route_request(const char *url, struct MHD_Connection *connection) {
     if (strcmp(url, "/api/status") == 0)
         return handle_status(connection);
 
-    if (strcmp(url, "/") == 0)
-        return handle_File(connection,"/srv/rpiNode/index.html","text/html");
-        
-    // fallback
-    const char *msg = "Not Found";
-    struct MHD_Response *resp = MHD_create_response_from_buffer(strlen(msg), (void *)msg, MHD_RESPMEM_PERSISTENT);
-    int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, resp);
-    MHD_destroy_response(resp);
-    return ret;
+    if (strcmp(url, "/") == 0 || strcmp(url, "/index.html"))
+        return handle_File(connection,"/srv/rpiNode/html/index.html","text/html");
+
+    //TODO: determine content types, add generic handle_file call based on url var
+
+    //char filename[256];
+    //snprintf(filename, sizeof(filename), "%s", "");
+
+    // fallback -- unreached
+    char error_msg[256];
+    snprintf(error_msg, sizeof(error_msg), "%s Not Found", url);
+
+    return queue_error_response(connection, error_msg);
 
 }

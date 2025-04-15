@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 char *read_file(const char *filename) {
+
     FILE *file = fopen(filename, "rb");
     if (!file) return NULL;
 
