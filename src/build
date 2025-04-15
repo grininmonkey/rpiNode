@@ -1,8 +1,20 @@
 #!/bin/bash
 set -e
 
+cd "$(dirname "$0")"
+
+# Initial setup
 if [[ "$1" == "install" ]]; then
     sudo xargs -a ../packages.txt apt install -y
+    sudo mkdir -p /etc/rpiNode
+    sudo mkdir -p /srv/rpiNode
+    sudo mkdir -p /srv/rpiNode/html
+    sudo cp ../html/*.* /srv/rpiNode/html/
+fi
+
+# -- tmp for development use --
+if [[ "$1" == "update" ]]; then
+    sudo cp ../html/*.* /srv/rpiNode/html/
 fi
 
 # Check for "debug" argument
