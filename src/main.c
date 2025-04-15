@@ -32,7 +32,7 @@ SharedData rpiNode = {
     .lock = PTHREAD_MUTEX_INITIALIZER
 };
 //--------------------------------------------------------------------------------
-// === Function pointer array ===
+// Function pointer array
 //--------------------------------------------------------------------------------
 void* (*thread_functions[NUM_THREADS])(void*) = {
     read_ds18b20,
@@ -41,7 +41,7 @@ void* (*thread_functions[NUM_THREADS])(void*) = {
     serve_http
 };
 //--------------------------------------------------------------------------------
-// === Launch threads based on flags ===
+// Launch threads based on flags 
 //--------------------------------------------------------------------------------
 void launch_threads() {
     pthread_t threads[NUM_THREADS];
@@ -75,20 +75,6 @@ int main() {
     ) 
         launch_threads();
     
-/*
-
-        if (pthread_create(&t_PIVALUES, NULL, read_piValues, NULL) != 0) {
-            perror("[main]: Failed to create PIVALUES");
-            return 1;
-        }
-
-        if (pthread_create(&t_WEB, NULL, serve_http, NULL) != 0) {
-            perror("[main]: Failed to create WEB");
-            return 1;
-        }
-
-    */
-
     // Clean up
     pthread_mutex_destroy(&lock);
     pthread_mutex_destroy(&rpiNode.lock);

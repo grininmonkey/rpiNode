@@ -57,10 +57,8 @@ void* serve_http(void* arg) {
             exit(EXIT_FAILURE);
         }
     }
-
     // stdout Notification
     printf("[NETWORK][%d]: http started on port(%i)\n", p_tid, port);
-
     //--------------------------------------------------------------------------
     // Start Micro HTTP daemon-server & mDNS
     //--------------------------------------------------------------------------
