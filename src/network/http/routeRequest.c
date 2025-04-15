@@ -3,6 +3,7 @@
 //-----------------------------------------------------
 //#include "handlers/values.h"
 #include "handlers/handleStatus.h"  
+#include "handlers/handleFile.h"
 //-----------------------------------------------------
 
 int route_request(const char *url, struct MHD_Connection *connection) {
@@ -11,7 +12,8 @@ int route_request(const char *url, struct MHD_Connection *connection) {
     if (strcmp(url, "/api/status") == 0)
         return handle_status(connection);
 
-
+    if (strcmp(url, "/") == 0)
+        return handle_File(connection,"/srv/rpiNode/index.html","text/html");
         
     // fallback
     const char *msg = "Not Found";

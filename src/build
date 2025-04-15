@@ -25,6 +25,7 @@ declare -A FILE_MAP=(
     [sensors/MPU6050/assignValues.c]=assignValues.o
     [sensors/DS18B20/readDS18B20.c]=readDS18B20.o
     [network/http/answerConnection.c]=answerConnection.o
+    [network/http/handlers/handleFile.c]=handleFile.o
     [network/http/handlers/handleStatus.c]=handleStatus.o
     [sensors/MPU6050/calculateAngles.c]=calculateAngles.o
     [sensors/DS18B20/scanForW1Devices.c]=scanForW1Devices.o
