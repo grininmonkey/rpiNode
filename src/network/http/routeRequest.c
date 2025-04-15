@@ -8,11 +8,15 @@
 #include "handlers/handleFile.h"
 //-----------------------------------------------------
 
-// TODO: base filename path as a define somewhere
+//
+// TODO: 
+//      base filename path as a define somewhere, or make
+//      it a config variable?
+//
 
 int route_request(const char *url, struct MHD_Connection *connection) {
 
-    // TODO: Add api(json) handlers
+    // TODO: Add /api/<json> handlers
     if (strcmp(url, "/api/status") == 0)
         return handle_status(connection);
 
