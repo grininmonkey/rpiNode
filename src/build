@@ -17,6 +17,12 @@ if [[ "$1" == "update" ]]; then
     sudo cp -v ../html/*.* /srv/rpiNode/html/
 fi
 
+# -- tmp for development use --
+if [[ "$1" == "update-only" ]]; then
+    sudo cp -v ../html/*.* /srv/rpiNode/html/
+    false 
+fi
+
 # Check for "debug" argument
 CFLAGS="-Wall"
 LDFLAGS="-Wall -pthread -lsqlite3 -lmicrohttpd -ljansson $(pkg-config --cflags --libs avahi-client) -lm"
@@ -77,3 +83,8 @@ rm -f *.o
 find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.txt" \) -exec chmod -x {} +
 
 echo "Build complete!"
+
+# -- tmp for development use --
+if [[ "$1" == "run" ]]; then
+    sudo ../rpiNode
+fi
