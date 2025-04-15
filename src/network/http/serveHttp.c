@@ -19,7 +19,7 @@ void* serve_http(void* arg) {
     int sockfd, publish_mDNS, broadcast_enable, counter = 0;
     int broadcast_interval = 2 * 10; // 10 loops/sec default 2s  TODO: Add to Config                 
     char MESSAGE[sizeof(((Config *)0)->id) + 15];
-    char cluster_id[sizeof(((Config *)0)->clusterID)];
+    char service_name[sizeof(((Config *)0)->id) + 1];
     pid_t p_tid = syscall(SYS_gettid);
     struct sockaddr_in broadcast_addr;
     unsigned int port;                  
@@ -34,7 +34,7 @@ void* serve_http(void* arg) {
         port = (unsigned int)rpiNode.config.httpPort;   // Configure http port
         publish_mDNS = rpiNode.config.mDNS;             // mDNS flag
         broadcast_enable = rpiNode.config.broadcast;    // UDP flag
-        snprintf(cluster_id, sizeof(cluster_id), "%s", rpiNode.config.clusterID);
+        snprintf(service_name, sizeof(service_name), "%s", rpiNode.config.id);
         // Configure the UDP broadcast address and message
         if (broadcast_enable) {
             memset(&broadcast_addr, 0, sizeof(broadcast_addr));
@@ -73,7 +73,7 @@ void* serve_http(void* arg) {
         return NULL;
     } 
     
-    if (publish_mDNS > 0 && publish_mdns_service(port, p_tid, cluster_id) != 0)
+    if (publish_mDNS > 0 && publish_mdns_service(port, p_tid, service_name) != 0)
         fprintf(stderr, "[NETWORK][%d]: Failed to publish mDNS service.\n", p_tid);
     //--------------------------------------------------------------------------
     // thread loop
