@@ -11,11 +11,12 @@
 
 #define NUM_THREADS 4
 //--------------------------------------------------------------------------------
-// Set Config Defaults
+// Set some config defaults in case config.json is missing/empty
 //--------------------------------------------------------------------------------
 SharedData rpiNode = {
     .config = {
         .id = "rpiNode-id-notset",
+        .clusterID = "7B28F91B307D4AD5BF586057CEAF010A",
         .http = 1,
         .mDNS = 1,
         .httpPort = 80,

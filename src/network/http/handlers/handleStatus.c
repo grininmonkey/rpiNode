@@ -17,6 +17,7 @@ int handle_status(struct MHD_Connection *connection) {
     pthread_mutex_lock(&rpiNode.lock);
     
     json_object_set_new(root, "id", json_string(rpiNode.config.id));
+    json_object_set_new(root, "clusterID", json_string(rpiNode.config.clusterID));
     json_object_set_new(root, "http", json_boolean(rpiNode.config.http));
     json_object_set_new(root, "mDNS", json_boolean(rpiNode.config.mDNS));
     json_object_set_new(root, "master", json_boolean(rpiNode.config.master));

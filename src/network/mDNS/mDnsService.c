@@ -44,7 +44,7 @@ static void client_callback(AvahiClient *c, AvahiClientState state, void *userda
     }
 }
 
-int publish_mdns_service(uint16_t port, pid_t t_pid) {
+int publish_mdns_service(uint16_t port, pid_t t_pid, char *cluster_id) {
 
     int error;
     pid_t *t_pid_ptr = malloc(sizeof(pid_t));
@@ -76,7 +76,7 @@ int publish_mdns_service(uint16_t port, pid_t t_pid) {
     }
 
     int ret = avahi_entry_group_add_service(group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, 0,
-                                            "rpiNode Service", "_http._tcp", NULL, NULL, port, NULL);
+                                            cluster_id, "_http._tcp", NULL, NULL, port, NULL);
     if (ret < 0) {
         fprintf(stderr, "[NETWORK][%d]: Failed to add service: %s\n", *t_pid_ptr, avahi_strerror(ret));
         return -1;

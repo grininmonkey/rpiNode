@@ -63,6 +63,7 @@ int read_config_file(pid_t pid) {
     json_t *useTmpfs = json_object_get(root, "useTmpfs");
     json_t *tmpfsSize = json_object_get(root, "tmpfsSize");
     json_t *broadcast = json_object_get(root, "broadcast");
+    json_t *clusterID = json_object_get(root, "clusterID");
     json_t *broadcastIP = json_object_get(root, "broadcastIP");
     json_t *broadcastPort = json_object_get(root, "broadcastPort");
     json_t *tmpfsFolderName = json_object_get(root, "tmpfsFolderName");
@@ -74,6 +75,7 @@ int read_config_file(pid_t pid) {
     // Base
     //-----------------------------------------------------------------
     SAFE_STRCPY(rpiNode.config.id, get_string("id", rpiNode.config.id, id, CONFIG_MAX_ID));
+    SAFE_STRCPY(rpiNode.config.clusterID, get_string("clusterID", rpiNode.config.clusterID, clusterID, CONFIG_MAX_CLUSTER_ID));
     SAFE_STRCPY(rpiNode.config.broadcastIP, get_string("broadcastIP", rpiNode.config.broadcastIP, broadcastIP, CONFIG_MAX_BROADCASTIP));
     SAFE_STRCPY(rpiNode.config.tmpfsFolderName, get_string("tmpfsFolderName", rpiNode.config.tmpfsFolderName, tmpfsFolderName, CONFIG_MAX_TMPFSFOLDERNAME));
     SAFE_STRCPY(rpiNode.config.currentValuesDBName, get_string("currentValuesDBName", rpiNode.config.currentValuesDBName, currentValuesDBName, CONFIG_MAX_DB_NAME));
@@ -130,6 +132,7 @@ int read_config_file(pid_t pid) {
 
     printf("[main][%d]: Config loaded successfully\n", pid);
     printf("[main][%d]:\t\t# id: %s\n", pid, rpiNode.config.id);
+    printf("[main][%d]:\t\t# clusterID: %s\n", pid, rpiNode.config.clusterID);
     printf("[main][%d]:\t\t# http: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.http));
     printf("[main][%d]:\t\t# mDNS: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.mDNS));
     printf("[main][%d]:\t\t# master: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.master));

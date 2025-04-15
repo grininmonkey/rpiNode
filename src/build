@@ -2,8 +2,8 @@
 set -e
 
 cd "$(dirname "$0")"
-
 find ../ ../html -type f \( -name "*.js" -o -name "*.css" -o -name "*.html" -o -name "*.json" \) -exec chmod -x {} +
+echo -e "\n"
 
 # Initial setup
 if [[ "$1" == "install" ]]; then
