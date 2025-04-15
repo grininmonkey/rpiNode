@@ -12,6 +12,7 @@ if [[ "$1" == "install" ]]; then
     sudo mkdir -v -p /etc/rpiNode
     sudo mkdir -v -p /srv/rpiNode
     sudo mkdir -v -p /srv/rpiNode/html
+    echo -e "\n"
     sudo cp -v ../html/*.* /srv/rpiNode/html/
     if [ -f "/etc/rpiNode/config.json" ]; then
         timestamp=$(date +%Y%m%d%H%M%S)
