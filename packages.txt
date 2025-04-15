@@ -1,0 +1,8 @@
+sqlite3
+libsqlite3-dev
+avahi-daemon
+libavahi-client-dev
+libavahi-common-dev
+libmicrohttpd-dev
+libjansson-dev
+
