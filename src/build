@@ -103,9 +103,9 @@ echo -e "\n"
 # TO-BE REMOVED Soon TM ----------------
 #---------------------------------------
 if [ "$1" == "run-mem" ]; then
-    sudo valgrind --suppressions=valgrind.supp ../rpiNode
+    sudo valgrind --suppressions=valgrind.supp ../rpiNode --daemon
 fi
 
 if [[ "$1" == "run" ]]; then
-    sudo ../rpiNode
+    sudo ../rpiNode --daemon
 fi

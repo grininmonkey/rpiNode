@@ -1,3 +1,4 @@
+#include <string.h>
 #include <unistd.h>
 #include "config/readConfigFile.h"
 #include "structs/rpiNode.h"
@@ -10,7 +11,7 @@
 #include "network/http/serveHttp.h"
 #include "network/mDNS/mDnsScan.h"
 
-#define NUM_THREADS 5
+#define NUM_DAEMON_THREADS 5
 //--------------------------------------------------------------------------------
 // Set some config defaults in case config.json is missing/empty
 //--------------------------------------------------------------------------------
@@ -37,7 +38,7 @@ SharedData rpiNode = {
 //--------------------------------------------------------------------------------
 // Function pointer array
 //--------------------------------------------------------------------------------
-void* (*thread_functions[NUM_THREADS])(void*) = {
+void* (*daemon_thread_functions[NUM_DAEMON_THREADS])(void*) = {
     read_ds18b20,
     read_mpu6050,
     write_to_db,
@@ -47,22 +48,26 @@ void* (*thread_functions[NUM_THREADS])(void*) = {
 //--------------------------------------------------------------------------------
 // Launch threads based on flags 
 //--------------------------------------------------------------------------------
-void launch_threads() {
-    pthread_t threads[NUM_THREADS];
-    for (int i = 0; i < NUM_THREADS; i++) {
-        if (pthread_create(&threads[i], NULL, thread_functions[i], NULL) != 0) {
+void launch_daemon_threads() {
+    pthread_t threads[NUM_DAEMON_THREADS];
+    for (int i = 0; i < NUM_DAEMON_THREADS; i++) {
+        if (pthread_create(&threads[i], NULL, daemon_thread_functions[i], NULL) != 0) {
             perror("pthread_create");
         }
     }
     // Join active threads
-    for (int i = 0; i < NUM_THREADS; i++) {
+    for (int i = 0; i < NUM_DAEMON_THREADS; i++) {
         pthread_join(threads[i], NULL);
     }
 }
 //--------------------------------------------------------------------------------
 // Main
 //--------------------------------------------------------------------------------
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s --daemon | --get-tag node-id=<nodeID> tag-id=<tagID> ....\n", argv[0]);
+        return 1;
+    }
 
     pid_t m_pid = getpid();
     
@@ -70,20 +75,25 @@ int main() {
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    printf("[main][%d]: Started\n", m_pid);
-
-    if (
-           read_config_file(m_pid) 
-        && setTmpfs(m_pid)
-        && initializeDB(m_pid)
-    ) 
-        launch_threads();
-    
-    // Clean up
-    pthread_mutex_destroy(&lock);
-    pthread_mutex_destroy(&rpiNode.lock);
-
-    printf("[main][%d]: Stopped\n", m_pid);
+    if (strcmp(argv[1], "--daemon") == 0) {
+        //--------------------------------------------
+        // daemon mode
+        //--------------------------------------------
+        printf("[main][%d]: Started\n", m_pid);
+        if (
+            read_config_file(m_pid) 
+            && setTmpfs(m_pid)
+            && initializeDB(m_pid)
+        ) 
+            launch_daemon_threads();
+        
+        // Clean up
+        pthread_mutex_destroy(&lock);
+        pthread_mutex_destroy(&rpiNode.lock);
+        printf("[main][%d]: Stopped\n", m_pid);
+    } else {
+        // run future client function
+    }
 
     return 0;
 
