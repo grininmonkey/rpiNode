@@ -8,8 +8,9 @@
 #include "sensors/DS18B20/readDS18B20.h"
 #include "sensors/MPU6050/readMPU6050.h"
 #include "network/http/serveHttp.h"
+#include "network/mDNS/mDnsScan.h"
 
-#define NUM_THREADS 4
+#define NUM_THREADS 5
 //--------------------------------------------------------------------------------
 // Set some config defaults in case config.json is missing/empty
 //--------------------------------------------------------------------------------
@@ -30,6 +31,7 @@ SharedData rpiNode = {
         .currentValuesViewName = "vValues",
         .MPU6050scanMilliseconds = 500
     },
+    .service_list = NULL,
     .lock = PTHREAD_MUTEX_INITIALIZER
 };
 //--------------------------------------------------------------------------------
@@ -39,7 +41,8 @@ void* (*thread_functions[NUM_THREADS])(void*) = {
     read_ds18b20,
     read_mpu6050,
     write_to_db,
-    serve_http
+    serve_http,
+    scan_mdns_service
 };
 //--------------------------------------------------------------------------------
 // Launch threads based on flags 

@@ -6,7 +6,9 @@
 //---------------------------------------------------------------
 
 #include "config.h"
+#include "serviceInfo.h"
 #include <pthread.h>
+
 
 //---------------------------------------------------------------
 // macros
@@ -90,6 +92,7 @@ typedef struct {
     Internal internal;
     External external;
     SingleValue tags[RPI_MAX_TAGS];
+    ServiceInfo *service_list;
     pthread_mutex_t lock;
 } SharedData;
 
