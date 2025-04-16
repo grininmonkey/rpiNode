@@ -4,6 +4,7 @@
 #include <jansson.h>
 #include "readConfigFile.h"
 #include "../structs/rpiNode.h"
+#include "../utils/nameValue.h"
 
 int test_string(const char *name, json_t *obj, int MAX) {
     if (json_is_string(obj)) {
@@ -59,7 +60,7 @@ int read_config_file(pid_t pid) {
     json_t *internal = json_object_get(root, "internal");
     json_t *saveToDB = json_object_get(root, "saveToDB");
     json_t *httpPort = json_object_get(root, "httpPort");
-    json_t *commands = json_object_get(root, "commands");
+    //json_t *commands = json_object_get(root, "commands");
     json_t *useTmpfs = json_object_get(root, "useTmpfs");
     json_t *tmpfsSize = json_object_get(root, "tmpfsSize");
     json_t *broadcast = json_object_get(root, "broadcast");
@@ -68,6 +69,7 @@ int read_config_file(pid_t pid) {
     json_t *broadcastPort = json_object_get(root, "broadcastPort");
     json_t *tmpfsFolderName = json_object_get(root, "tmpfsFolderName");
     json_t *updateDBSeconds = json_object_get(root, "updateDBSeconds");
+    json_t *internal_settings = json_object_get(root, "internal_settings");
     json_t *currentValuesDBName = json_object_get(root, "currentValuesDBName");
 
     pthread_mutex_lock(&rpiNode.lock);
@@ -108,20 +110,26 @@ int read_config_file(pid_t pid) {
         rpiNode.config.MPU6050 = get_true_false(rpiNode.config.MPU6050, MPU6050);
         rpiNode.config.DS18B20 = get_true_false(rpiNode.config.DS18B20, DS18B20);
         rpiNode.config.DS18B20scanSeconds = get_integer(rpiNode.config.DS18B20scanSeconds, DS18B20scanSeconds);    
-        rpiNode.config.MPU6050scanMilliseconds = get_integer(rpiNode.config.MPU6050scanMilliseconds, MPU6050scanMilliseconds);    
-    }
-    //-----------------------------------------------------------------
-    // External commands
-    //-----------------------------------------------------------------
-    if (json_is_array(commands)) {
-        size_t index;
-        json_t *lang;
-        json_array_foreach(commands, index, lang) {
-            if (json_is_string(lang)) {
-                printf("  - %s\n", json_string_value(lang));
+        rpiNode.config.MPU6050scanMilliseconds = get_integer(rpiNode.config.MPU6050scanMilliseconds, MPU6050scanMilliseconds); 
+        
+        size_t internal_index;
+        json_t *element;
+        if (json_is_array(internal_settings)) {
+            json_array_foreach(internal_settings, internal_index, element) {
+                json_t *jname = json_object_get(element, "name");
+                json_t *jvalue = json_object_get(element, "value");
+                if (json_is_string(jname) && json_is_string(jvalue)) {
+                    namevalue_add(&rpiNode.internal_config, json_string_value(jname), json_string_value(jvalue));
+                }
             }
         }
     }
+    //-----------------------------------------------------------------
+    // TODO: External commands
+    //-----------------------------------------------------------------
+    //if (json_is_array(commands)) {
+
+    //}
 
     pthread_mutex_unlock(&rpiNode.lock);
     //-----------------------------------------------------------
@@ -136,8 +144,6 @@ int read_config_file(pid_t pid) {
     printf("[main][%d]:\t\t# http: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.http));
     printf("[main][%d]:\t\t# mDNS: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.mDNS));
     printf("[main][%d]:\t\t# master: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.master));
-    printf("[main][%d]:\t\t# MPU6050: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.MPU6050));
-    printf("[main][%d]:\t\t# DS18B20: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.DS18B20));
     printf("[main][%d]:\t\t# saveToDB: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.saveToDB));
     printf("[main][%d]:\t\t# useTmpfs: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.useTmpfs));
     printf("[main][%d]:\t\t# httpPort: %i\n", pid, rpiNode.config.httpPort);
@@ -148,9 +154,13 @@ int read_config_file(pid_t pid) {
     printf("[main][%d]:\t\t# tmpfsFolderName: %s\n", pid, rpiNode.config.tmpfsFolderName);
     printf("[main][%d]:\t\t# updateDBSeconds: %i\n", pid, rpiNode.config.updateDBSeconds);
     printf("[main][%d]:\t\t# currentValuesDB: %s\n", pid, rpiNode.config.currentValuesDB);
-    printf("[main][%d]:\t\t# DS18B20scanSeconds: %i\n", pid, rpiNode.config.DS18B20scanSeconds);
     printf("[main][%d]:\t\t# currentValuesDBName: %s\n", pid, rpiNode.config.currentValuesDBName);
-    printf("[main][%d]:\t\t# MPU6050scanMilliseconds: %i\n", pid, rpiNode.config.MPU6050scanMilliseconds);
+   
+    NameValue *current = rpiNode.internal_config;
+    while (current != NULL) {
+        printf("[main][%d]:\t\t# %s: %s\n", pid, current->name, current->value);
+        current = current->next;
+    }
 
     return 1;
 

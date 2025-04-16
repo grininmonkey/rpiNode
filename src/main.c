@@ -3,6 +3,7 @@
 #include "config/readConfigFile.h"
 #include "structs/rpiNode.h"
 #include "utils/setTmpfs.h"
+#include "utils/nameValue.h"
 #include "utils/signalHandler.h"
 #include "local/db/initDB.h"
 #include "local/db/writeToDB.h"
@@ -93,6 +94,7 @@ int main(int argc, char *argv[]) {
         // Clean up
         pthread_mutex_destroy(&lock);
         pthread_mutex_destroy(&rpiNode.lock);
+        namevalue_free_all(rpiNode.internal_config);
         printf("[main][%d]: Stopped\n", m_pid);
     } else {
         // run future client function

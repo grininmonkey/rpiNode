@@ -20,5 +20,11 @@
         "MPU6050scanMilliseconds": 400,
         "DS18B20": 0,
         "DS18B20scanSeconds": 5
-    }
+    },
+    "internal_settings": [
+        {"name": "MPU6050", "value": "0"},
+        {"name": "MPU6050scanMilliseconds", "value": "400"},
+        {"name": "DS18B20", "value": "0"},
+        {"name": "DS18B20scanSeconds", "value": "5"}
+    ]
 }

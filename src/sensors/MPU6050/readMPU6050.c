@@ -15,6 +15,7 @@
 #include "../../utils/signalHandler.h"
 #include "../../utils/getTimeStamp.h"
 #include "../../utils/sleepMs.h"
+#include "../../utils/nameValue.h"
 #include "../../structs/rpiNode.h"
 
 #define MPU_ADDR 0x68
@@ -29,20 +30,25 @@ int read_word_2c(char high, char low) {
 void* read_mpu6050(void* arg) {
 
     int config_sleep_ms = 200; // default
-    int file;
+    int file, MPU6050, MPU6050scanMilliseconds;
     const char *bus = "/dev/i2c-1";
 
     pid_t t_pid = syscall(SYS_gettid);
-    
+
     pthread_mutex_lock(&rpiNode.lock);
+    // Get/Set settings 
+    if (namevalue_find_as_integer(rpiNode.internal_config, "MPU6050", &MPU6050) == 0)
+        MPU6050 = 0;
+    if (namevalue_find_as_integer(rpiNode.internal_config, "MPU6050scanMilliseconds", &MPU6050scanMilliseconds) == 0)
+        MPU6050scanMilliseconds = 200;
     // Exit if not flagged
-    if (rpiNode.config.MPU6050 != 1) {
+    if (MPU6050 != 1) {
         pthread_mutex_unlock(&rpiNode.lock);
         return NULL;
     }
     // set sleep milliseconds
-    if (rpiNode.config.MPU6050scanMilliseconds > 10)
-        config_sleep_ms = rpiNode.config.MPU6050scanMilliseconds;
+    if (MPU6050scanMilliseconds > 20)
+        config_sleep_ms = MPU6050scanMilliseconds;
     pthread_mutex_unlock(&rpiNode.lock);
     
     printf("[MPU6050][%d]: Started -> reading every (%i)ms\n", t_pid, config_sleep_ms);
@@ -126,17 +132,6 @@ void* read_mpu6050(void* arg) {
         mpu6050_assign_values(5, "gyro-x", gyro_x);
         mpu6050_assign_values(6, "gyro-y", gyro_y);
         mpu6050_assign_values(7, "gyro-z", gyro_z);
-
-        /*
-        mpu6050_assign_values(&rpiNode, 0, "pitch", pitch, timestamp);
-        mpu6050_assign_values(&rpiNode, 1, "roll", roll, timestamp);
-        mpu6050_assign_values(&rpiNode, 2, "accel-x", smoothed_x, timestamp);
-        mpu6050_assign_values(&rpiNode, 3, "accel-y", smoothed_y, timestamp);
-        mpu6050_assign_values(&rpiNode, 4, "accel-z", smoothed_z, timestamp);
-        mpu6050_assign_values(&rpiNode, 5, "gyro-x", gyro_x, timestamp);
-        mpu6050_assign_values(&rpiNode, 6, "gyro-y", gyro_y, timestamp);
-        mpu6050_assign_values(&rpiNode, 7, "gyro-z", gyro_z, timestamp);
-        */
 
         sleep_ms(config_sleep_ms); 
 
