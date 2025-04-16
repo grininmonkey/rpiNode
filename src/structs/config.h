@@ -12,8 +12,6 @@ typedef struct {
     int http;
     int mDNS;
     int master;
-    int MPU6050;
-    int DS18B20;
     int useTmpfs;
     int saveToDB;
     int httpPort;
@@ -22,8 +20,6 @@ typedef struct {
     int broadcast;
     int broadcastPort;
     int updateDBSeconds;
-    int DS18B20scanSeconds;
-    int MPU6050scanMilliseconds;
     char id[CONFIG_MAX_ID];
     char clusterID[CONFIG_MAX_CLUSTER_ID];
     char broadcastIP[CONFIG_MAX_BROADCASTIP];

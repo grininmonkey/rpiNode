@@ -103,7 +103,7 @@ int read_config_file(pid_t pid) {
     // Internal Sensor flags
     //-----------------------------------------------------------------
     if (json_is_object(internal)) {
-        json_t *MPU6050 = json_object_get(internal, "MPU6050");
+/*         json_t *MPU6050 = json_object_get(internal, "MPU6050");
         json_t *DS18B20 = json_object_get(internal, "DS18B20");
         json_t *DS18B20scanSeconds = json_object_get(internal, "DS18B20scanSeconds");
         json_t *MPU6050scanMilliseconds = json_object_get(internal, "MPU6050scanMilliseconds");
@@ -111,7 +111,7 @@ int read_config_file(pid_t pid) {
         rpiNode.config.DS18B20 = get_true_false(rpiNode.config.DS18B20, DS18B20);
         rpiNode.config.DS18B20scanSeconds = get_integer(rpiNode.config.DS18B20scanSeconds, DS18B20scanSeconds);    
         rpiNode.config.MPU6050scanMilliseconds = get_integer(rpiNode.config.MPU6050scanMilliseconds, MPU6050scanMilliseconds); 
-        
+ */        
         size_t internal_index;
         json_t *element;
         if (json_is_array(internal_settings)) {

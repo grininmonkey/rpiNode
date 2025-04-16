@@ -35,19 +35,22 @@ int handle_status(struct MHD_Connection *connection) {
     json_object_set_new(root, "currentValuesDBName", json_string(rpiNode.config.currentValuesDBName));
     json_object_set_new(root, "currentValuesViewName", json_string(rpiNode.config.currentValuesViewName));
 
-    json_t *internal = json_object();
-    json_object_set_new(internal, "MPU6050", json_boolean(rpiNode.config.MPU6050));
-    json_object_set_new(internal, "MPU6050scanMilliseconds", json_integer(rpiNode.config.MPU6050scanMilliseconds));
-    json_object_set_new(internal, "MPU6050valuesCount", json_integer(rpiNode.internal.MPU6050.values_count));
-    json_object_set_new(internal, "DS18B20", json_boolean(rpiNode.config.DS18B20));
-    json_object_set_new(internal, "DS18B20scanSeconds", json_integer(rpiNode.config.DS18B20scanSeconds));
-    json_object_set_new(internal, "DS18B20count", json_integer(rpiNode.internal.DS18B20_count));
+    json_t *name_value_array = json_array();  // Create an empty JSON array
+    NameValue *current = rpiNode.internal_config;
+    while (current != NULL) {
+        json_t *obj = json_object();
+        json_object_set_new(obj, "name", json_string(current->name));
+        json_object_set_new(obj, "value", json_string(current->value));
+        json_array_append_new(name_value_array, obj);  // Add object to array
+        current = current->next;
+    }
     
     pthread_mutex_unlock(&rpiNode.lock);
     //------------------------------------------------------------------------
     // Complete json
     //------------------------------------------------------------------------
-    json_object_set_new(root, "internal", internal);
+    json_object_set_new(root, "internal_settings", name_value_array);
+    //json_object_set_new(root, "internal", internal);
 
     char *json = json_dumps(root, 0);
     json_decref(root);    

@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "../../structs/rpiNode.h"
-//#include "../../utils/getTimeStamp.h"
 #include "../../utils/setSharedValue.h"
 
 void read_slave(int index, const char *device, const char *full_path, pid_t t_pid) {
@@ -25,6 +23,9 @@ void read_slave(int index, const char *device, const char *full_path, pid_t t_pi
         if (t_ptr) {
             temperatureC = atoi(t_ptr + 2)/1000.0;
             temperatureF = temperatureC* 9.0 / 5.0 + 32.0;
+            pthread_mutex_lock(&rpiNode.lock);
+                rpiNode.internal.DS18B20[index].values_count = 2;
+            pthread_mutex_unlock(&rpiNode.lock);
             break;
         }
     }
@@ -38,8 +39,8 @@ void read_slave(int index, const char *device, const char *full_path, pid_t t_pi
         snprintf(id, RPI_MAX_META_ID, "%s-%s", device, (i == 0) ? "C" : "F");
         snprintf(value, RPI_MAX_VALUE_LENGTH, "%.2f", (i == 0) ? temperatureC : temperatureF);
         set_shared_multivalue(
-            &rpiNode.internal.MPU6050, index, i, id, "1wire", "DS18B20 temperature sensor", 0.0, value
-        );
+            &rpiNode.internal.DS18B20[index], index, i, id, "1wire", "DS18B20 temperature sensor", 0.0, value
+        );        
     }
 
     return;

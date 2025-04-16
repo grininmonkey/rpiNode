@@ -33,8 +33,7 @@ void scanFor_w1_devices(pid_t t_pid) {
         }
 
         pthread_mutex_lock(&rpiNode.lock);
-        rpiNode.internal.DS18B20_count = index;
-        rpiNode.internal.DS18B20[index].values_count = 2;
+            rpiNode.internal.DS18B20_count = index;
         pthread_mutex_unlock(&rpiNode.lock);
         
         closedir(dir);

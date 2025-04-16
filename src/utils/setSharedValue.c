@@ -21,6 +21,7 @@ void set_shared_multivalue(
     //-----------------------------------------------------------------
     // Handle arrays vs single instance
     //-----------------------------------------------------------------
+    /*
     if (obj_index != SINGLE_INSTANCE) {
         if (obj_index >= 0 && obj_index < RPI_MAX_INTERNAL_OBJECTS) {
             target = &obj[obj_index];
@@ -29,6 +30,7 @@ void set_shared_multivalue(
             return;
         }
     } 
+    */
     //-----------------------------------------------------------------
     // 'target' is safe to use
     //-----------------------------------------------------------------

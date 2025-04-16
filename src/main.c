@@ -28,11 +28,10 @@ SharedData rpiNode = {
         .broadcast = 0,
         .updateDBSeconds = 2,
         .tmpfsFolderName = "tmpfs",
-        .DS18B20scanSeconds = 5,
         .currentValuesDBName = "current",
-        .currentValuesViewName = "vValues",
-        .MPU6050scanMilliseconds = 500
+        .currentValuesViewName = "vValues"
     },
+    .internal.DS18B20 = {{0}},
     .internal_config = NULL,
     .service_list = NULL,
     .lock = PTHREAD_MUTEX_INITIALIZER
