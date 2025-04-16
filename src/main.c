@@ -32,6 +32,7 @@ SharedData rpiNode = {
         .currentValuesViewName = "vValues",
         .MPU6050scanMilliseconds = 500
     },
+    .internal_config = NULL,
     .service_list = NULL,
     .lock = PTHREAD_MUTEX_INITIALIZER
 };
@@ -39,11 +40,13 @@ SharedData rpiNode = {
 // Function pointer array
 //--------------------------------------------------------------------------------
 void* (*daemon_thread_functions[NUM_DAEMON_THREADS])(void*) = {
-    read_ds18b20,
-    read_mpu6050,
-    write_to_db,
+    // Core threads
     serve_http,
-    scan_mdns_service
+    write_to_db,
+    scan_mdns_service,
+    // Internal code/threads for sensors etc
+    read_ds18b20,
+    read_mpu6050
 };
 //--------------------------------------------------------------------------------
 // Launch threads based on flags 

@@ -25,7 +25,7 @@ int update_tags() {
     // -------------------------------------------------------------------------------
     // DS18B20 values
     // -------------------------------------------------------------------------------
-    for (int i = 0; i < RPI_MAX_DS18B20S; i++) {
+    for (int i = 0; i < RPI_MAX_INTERNAL_OBJECTS; i++) {
         for (int z = 0; z < rpiNode.internal.DS18B20[i].values_count; z++) {
             if (rpiNode.internal.DS18B20[i].values[z].info.id[0] != '\0') {
                 rpiNode.tags[index].info = rpiNode.internal.DS18B20[i].values[z].info;

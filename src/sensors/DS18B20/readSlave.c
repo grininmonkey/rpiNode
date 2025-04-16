@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../structs/rpiNode.h"
-#include "../../utils/getTimeStamp.h"
+//#include "../../structs/rpiNode.h"
+//#include "../../utils/getTimeStamp.h"
+#include "../../utils/setSharedValue.h"
 
 void read_slave(int index, const char *device, const char *full_path, pid_t t_pid) {
     
@@ -29,25 +30,17 @@ void read_slave(int index, const char *device, const char *full_path, pid_t t_pi
     }
 
     fclose(file);
-    
-    pthread_mutex_lock(&rpiNode.lock);
+
+    char id[RPI_MAX_META_ID];
+    char value[RPI_MAX_VALUE_LENGTH];
+
     for (int i = 0; i < values_count; i++) {
-        snprintf(
-            rpiNode.internal.DS18B20[index].values[i].info.id,
-            sizeof(rpiNode.internal.DS18B20[0].values[i].info.id),
-            "%s-%s", device, (i == 0) ? "C" : "F"
-        );
-        SAFE_STRCPY(rpiNode.internal.DS18B20[index].values[i].info.description,"DS18B20 temperature sensor");
-        SAFE_STRCPY(rpiNode.internal.DS18B20[index].values[i].info.type,"1wire");
-        SAFE_STRCPY(rpiNode.internal.DS18B20[index].values[i].info.timestamp, get_timestamp());
-        snprintf(
-            rpiNode.internal.DS18B20[index].values[i].value,
-            sizeof(rpiNode.internal.DS18B20[0].values[i].value),
-            "%.2f", (i == 0) ? temperatureC : temperatureF 
+        snprintf(id, RPI_MAX_META_ID, "%s-%s", device, (i == 0) ? "C" : "F");
+        snprintf(value, RPI_MAX_VALUE_LENGTH, "%.2f", (i == 0) ? temperatureC : temperatureF);
+        set_shared_multivalue(
+            &rpiNode.internal.MPU6050, index, i, id, "1wire", "DS18B20 temperature sensor", 0.0, value
         );
     }
-    rpiNode.internal.DS18B20[index].values_count = values_count;
-    pthread_mutex_unlock(&rpiNode.lock);
 
     return;
 }

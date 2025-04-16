@@ -15,6 +15,7 @@
 #include "../../utils/signalHandler.h"
 #include "../../utils/getTimeStamp.h"
 #include "../../utils/sleepMs.h"
+#include "../../structs/rpiNode.h"
 
 #define MPU_ADDR 0x68
 
@@ -117,6 +118,16 @@ void* read_mpu6050(void* arg) {
         SAFE_STRCPY(timestamp, get_timestamp());
 
         //Write to values structure
+        mpu6050_assign_values(0, "pitch", pitch);
+        mpu6050_assign_values(1, "roll", roll);
+        mpu6050_assign_values(2, "accel-x", smoothed_x);
+        mpu6050_assign_values(3, "accel-y", smoothed_y);
+        mpu6050_assign_values(4, "accel-z", smoothed_z);
+        mpu6050_assign_values(5, "gyro-x", gyro_x);
+        mpu6050_assign_values(6, "gyro-y", gyro_y);
+        mpu6050_assign_values(7, "gyro-z", gyro_z);
+
+        /*
         mpu6050_assign_values(&rpiNode, 0, "pitch", pitch, timestamp);
         mpu6050_assign_values(&rpiNode, 1, "roll", roll, timestamp);
         mpu6050_assign_values(&rpiNode, 2, "accel-x", smoothed_x, timestamp);
@@ -125,6 +136,7 @@ void* read_mpu6050(void* arg) {
         mpu6050_assign_values(&rpiNode, 5, "gyro-x", gyro_x, timestamp);
         mpu6050_assign_values(&rpiNode, 6, "gyro-y", gyro_y, timestamp);
         mpu6050_assign_values(&rpiNode, 7, "gyro-z", gyro_z, timestamp);
+        */
 
         sleep_ms(config_sleep_ms); 
 
