@@ -60,11 +60,11 @@ int read_config_file(pid_t pid) {
     json_t *internal = json_object_get(root, "internal");
     json_t *saveToDB = json_object_get(root, "saveToDB");
     json_t *httpPort = json_object_get(root, "httpPort");
-    //json_t *commands = json_object_get(root, "commands");
     json_t *useTmpfs = json_object_get(root, "useTmpfs");
     json_t *tmpfsSize = json_object_get(root, "tmpfsSize");
     json_t *broadcast = json_object_get(root, "broadcast");
     json_t *clusterID = json_object_get(root, "clusterID");
+    json_t *dataModules = json_object_get(root, "dataModules");
     json_t *broadcastIP = json_object_get(root, "broadcastIP");
     json_t *broadcastPort = json_object_get(root, "broadcastPort");
     json_t *tmpfsFolderName = json_object_get(root, "tmpfsFolderName");
@@ -100,18 +100,8 @@ int read_config_file(pid_t pid) {
     }
 
     //-----------------------------------------------------------------
-    // Internal Sensor flags
+    // Soon to be removed
     //-----------------------------------------------------------------
-    if (json_is_object(internal)) {
-/*         json_t *MPU6050 = json_object_get(internal, "MPU6050");
-        json_t *DS18B20 = json_object_get(internal, "DS18B20");
-        json_t *DS18B20scanSeconds = json_object_get(internal, "DS18B20scanSeconds");
-        json_t *MPU6050scanMilliseconds = json_object_get(internal, "MPU6050scanMilliseconds");
-        rpiNode.config.MPU6050 = get_true_false(rpiNode.config.MPU6050, MPU6050);
-        rpiNode.config.DS18B20 = get_true_false(rpiNode.config.DS18B20, DS18B20);
-        rpiNode.config.DS18B20scanSeconds = get_integer(rpiNode.config.DS18B20scanSeconds, DS18B20scanSeconds);    
-        rpiNode.config.MPU6050scanMilliseconds = get_integer(rpiNode.config.MPU6050scanMilliseconds, MPU6050scanMilliseconds); 
- */        
         size_t internal_index;
         json_t *element;
         if (json_is_array(internal_settings)) {
@@ -123,14 +113,41 @@ int read_config_file(pid_t pid) {
                 }
             }
         }
+    //-----------------------------------------------------------------
+    // TODO: dataModules pre populating rpiNode.data with 
+    // DataModule Struct chain
+    //-----------------------------------------------------------------
+    if (json_is_array(dataModules)) {
+        size_t module_index, component_index, nv_index;
+        json_t  *element, *sub_element, *nv_element, *name, *value,
+                *start, *verbose, *uniqueId, *components, *settings;
+        json_array_foreach(dataModules, module_index, element) {
+            name = json_object_get(element, "name");
+            start = json_object_get(element, "start");
+            verbose = json_object_get(element, "verbose");
+            uniqueId = json_object_get(element, "uniqueId");
+            components = json_object_get(element, "components");
+            // Add/Set Module entry into array
+            // ...
+            if (json_is_array(components)) {
+                json_array_foreach(components, component_index, sub_element) {
+                    name = json_object_get(sub_element, "name");
+                    settings = json_object_get(sub_element, "settings");
+                    // Add/Set component entry into module[index].component[index]array
+                    // ...
+                    if (json_is_array(settings)) {
+                        json_array_foreach(settings, nv_index, nv_element) {
+                            name = json_object_get(nv_element, "name");
+                            value = json_object_get(nv_element, "value");
+                            // Add/set to settings pointer list
+                            printf("data[%i].components[%i].settings[%i].name=%s\n", module_index, component_index, nv_index, json_string_value(name));
+            
+                        }
+                    }
+                }
+            }
+        }
     }
-    //-----------------------------------------------------------------
-    // TODO: External commands
-    //-----------------------------------------------------------------
-    //if (json_is_array(commands)) {
-
-    //}
-
     pthread_mutex_unlock(&rpiNode.lock);
     //-----------------------------------------------------------
     // Free memory & complete

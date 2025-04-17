@@ -42,9 +42,9 @@
 #define RPI_MAX_NAMEVALUE_NAME 256
 #define RPI_MAX_NAMEVALUE_VALUE 256
 
-#define RPI_MAX_DATACONTAINER_ID 56
-#define RPI_MAX_DATACOMPONENT_ID 56
-#define RPI_MAX_DATATAG_ID (RPI_MAX_DATACONTAINER_ID + RPI_MAX_DATACOMPONENT_ID + 58)
+#define RPI_MAX_DATACONTAINER_NAME 56
+#define RPI_MAX_DATACOMPONENT_NAME 56
+#define RPI_MAX_DATATAG_ID (RPI_MAX_DATACONTAINER_NAME + RPI_MAX_DATACOMPONENT_NAME + 58)
 #define RPI_MAX_DATA 250
 
 //---------------------------------------------------------------
@@ -72,6 +72,14 @@ typedef struct {
 	SingleValue values[RPI_MAX_VALUES_PER_OBJECT];
 } MultiValue;
 //---------------------------------------------------------------
+//  Generic NameValue Pointer List
+//---------------------------------------------------------------
+typedef struct NameValue {
+    char name[RPI_MAX_NAMEVALUE_NAME];
+    char value[RPI_MAX_NAMEVALUE_VALUE];
+    struct NameValue *next;
+} NameValue;
+//---------------------------------------------------------------
 // Internal / Sensor specific
 //---------------------------------------------------------------
 typedef struct {
@@ -92,15 +100,20 @@ typedef struct {
 
 typedef struct {
     int tags_count;
-    char id[RPI_MAX_DATACOMPONENT_ID];
+    char name[RPI_MAX_DATACOMPONENT_NAME];
+    NameValue *settings;
 	DataTag tags[RPI_MAX_VALUES_PER_OBJECT];
 } DataComponent;
 
 typedef struct {
+    int start;
+    int verbose;
+    int uniqueId;
     int components_count;
-    char id[RPI_MAX_DATACONTAINER_ID];
+    int threadSleepMilliseconds;
+    char name[RPI_MAX_DATACONTAINER_NAME];
     DataComponent components[RPI_MAX_INTERNAL_OBJECTS];
-} DataContainer;
+} DataModule;
 //---------------------------------------------------------------
 //  External / Commands 
 //---------------------------------------------------------------
@@ -108,14 +121,6 @@ typedef struct {
     int CMDS_count;
     SingleValue CMDS[RPI_MAX_SINGLES];
 } External;
-//---------------------------------------------------------------
-//  Generic NameValue Pointer List
-//---------------------------------------------------------------
-typedef struct NameValue {
-    char name[RPI_MAX_NAMEVALUE_NAME];
-    char value[RPI_MAX_NAMEVALUE_VALUE];
-    struct NameValue *next;
-} NameValue;
 //---------------------------------------------------------------
 //  Final Structure
 //---------------------------------------------------------------
@@ -127,7 +132,7 @@ typedef struct {
     External external;
     SingleValue tags[RPI_MAX_TAGS];
     ServiceInfo *service_list;
-    DataContainer data[RPI_MAX_DATA];
+    DataModule data[RPI_MAX_DATA];
     pthread_mutex_t lock;
 } SharedData;
 //---------------------------------------------------------------

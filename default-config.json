@@ -17,7 +17,23 @@
     "updateDBSeconds": 2,
     "dataModules": [
         {
-            "uniqueID": 1001,
+            "uniqueId": 1000,
+            "name": "EXAMPLE",
+            "start": 0,
+            "verbose": 1,
+            "threadSleepMilliseconds": 500,
+            "components": [
+                {
+                    "name": "DUMMY",
+                    "settings": [
+                        {"name": "mySetting1", "value": "Hello"},
+                        {"name": "mySetting2", "value": "PI"}
+                    ]
+                }
+            ]
+        },
+        {
+            "uniqueId": 1001,
             "name": "F_VALUE",
             "start": 0,
             "verbose": 0,
@@ -32,6 +48,19 @@
                     ]
                 }
             ]
+        },
+        {
+            "uniqueId": 1002,
+            "name": "SENSORS",
+            "start": 0,
+            "verbose": 0,
+            "threadSleepMilliseconds": 400,
+            "components": [
+                {
+                    "name": "MPU6050",
+                    "settings": []
+                }
+            ]            
         }
     ],
     "internal_settings": [
