@@ -119,10 +119,10 @@ int read_config_file(pid_t pid) {
     //-----------------------------------------------------------------
     if (json_is_array(dataModules)) {
         size_t module_index, component_index, nv_index;
-        json_t  *element, *sub_element, *nv_element, *name, *value,
-                *start, *verbose, *uniqueId, *components, *settings;
+        json_t  *element, *sub_element, *nv_element, *m_name, *c_name, *s_name,
+                *value, *start, *verbose, *uniqueId, *components, *settings;
         json_array_foreach(dataModules, module_index, element) {
-            name = json_object_get(element, "name");
+            m_name = json_object_get(element, "name");
             start = json_object_get(element, "start");
             verbose = json_object_get(element, "verbose");
             uniqueId = json_object_get(element, "uniqueId");
@@ -131,16 +131,16 @@ int read_config_file(pid_t pid) {
             // ...
             if (json_is_array(components)) {
                 json_array_foreach(components, component_index, sub_element) {
-                    name = json_object_get(sub_element, "name");
+                    c_name = json_object_get(sub_element, "name");
                     settings = json_object_get(sub_element, "settings");
                     // Add/Set component entry into module[index].component[index]array
                     // ...
                     if (json_is_array(settings)) {
                         json_array_foreach(settings, nv_index, nv_element) {
-                            name = json_object_get(nv_element, "name");
+                            s_name = json_object_get(nv_element, "name");
                             value = json_object_get(nv_element, "value");
                             // Add/set to settings pointer list
-                            printf("data[%i].components[%i].settings[%i].name=%s\n", module_index, component_index, nv_index, json_string_value(name));
+                            printf("data[%i].components[%i].settings[%i].name=%s\n", module_index, component_index, nv_index, json_string_value(s_name));
             
                         }
                     }
