@@ -1,5 +1,5 @@
-#ifndef RPINODE_H
-#define RPINODE_H
+#ifndef RPI_NODE_H
+#define RPI_NODE_H
 //---------------------------------------------------------------
 // includes
 //---------------------------------------------------------------
@@ -42,11 +42,7 @@
 #define RPI_MAX_DATATAG_ID (RPI_MAX_DATACONTAINER_NAME + RPI_MAX_DATACOMPONENT_NAME + 58)
 #define RPI_MAX_DATA 250
 //---------------------------------------------------------------
-//  Mostly use Fixed structs for speed, cache and simplicity
-//---------------------------------------------------------------
-
-//---------------------------------------------------------------
-// Base (Tag) DataPoint
+// Base (Tag) DataPoint (Soon to be obsolete)
 //---------------------------------------------------------------
 typedef struct {
     char id[RPI_MAX_META_ID];
@@ -82,7 +78,7 @@ typedef struct {
     MultiValue DS18B20[RPI_MAX_INTERNAL_OBJECTS];
 } Internal;
 //---------------------------------------------------------------
-// More generic data structure
+// More generic data structure  (TOBE)
 //---------------------------------------------------------------
 typedef struct {
     char Id[RPI_MAX_DATATAG_ID];
