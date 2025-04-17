@@ -1,19 +1,14 @@
 #ifndef RPINODE_H
 #define RPINODE_H
-
 //---------------------------------------------------------------
 // includes
 //---------------------------------------------------------------
-
 #include "config.h"
 #include "serviceInfo.h"
 #include <pthread.h>
-
-
 //---------------------------------------------------------------
 // macros
 //---------------------------------------------------------------
-
 #define INT_TRUE_FALSE(x) ((x) > 0 ? 1 : 0)
 #define INT_TRUE_FALSE_STR(x) ((x) > 0 ? "true" : "false")
 #define INT_GT_ZERO_AND_LE(x, y) (((x) > 0) && ((x) <= (y)) ? 1 : 0)
@@ -46,7 +41,6 @@
 #define RPI_MAX_DATACOMPONENT_NAME 56
 #define RPI_MAX_DATATAG_ID (RPI_MAX_DATACONTAINER_NAME + RPI_MAX_DATACOMPONENT_NAME + 58)
 #define RPI_MAX_DATA 250
-
 //---------------------------------------------------------------
 //  Mostly use Fixed structs for speed, cache and simplicity
 //---------------------------------------------------------------
@@ -88,7 +82,7 @@ typedef struct {
     MultiValue DS18B20[RPI_MAX_INTERNAL_OBJECTS];
 } Internal;
 //---------------------------------------------------------------
-// TOBE: New generic nested data structure
+// More generic data structure
 //---------------------------------------------------------------
 typedef struct {
     char Id[RPI_MAX_DATATAG_ID];
@@ -115,13 +109,6 @@ typedef struct {
     DataComponent components[RPI_MAX_INTERNAL_OBJECTS];
 } DataModule;
 //---------------------------------------------------------------
-//  External / Commands 
-//---------------------------------------------------------------
-typedef struct {
-    int CMDS_count;
-    SingleValue CMDS[RPI_MAX_SINGLES];
-} External;
-//---------------------------------------------------------------
 //  Final Structure
 //---------------------------------------------------------------
 typedef struct {
@@ -129,7 +116,6 @@ typedef struct {
     Config config;
     NameValue *internal_config;
     Internal internal;
-    External external;
     SingleValue tags[RPI_MAX_TAGS];
     ServiceInfo *service_list;
     DataModule data[RPI_MAX_DATA];

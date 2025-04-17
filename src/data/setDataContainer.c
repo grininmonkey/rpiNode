@@ -6,6 +6,5 @@ int set_data_container(char *id) {
 
     pthread_mutex_unlock(&rpiNode.lock);
 
-
     return -1;
 }
