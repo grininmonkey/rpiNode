@@ -15,12 +15,25 @@
     "broadcastPort": 8888,
     "broadcastIP": "255.255.255.255",
     "updateDBSeconds": 2,
-    "internal": {
-        "MPU6050": 0,
-        "MPU6050scanMilliseconds": 400,
-        "DS18B20": 0,
-        "DS18B20scanSeconds": 5
-    },
+    "dataModules": [
+        {
+            "uniqueID": 1001,
+            "name": "F_VALUE",
+            "start": 0,
+            "verbose": 0,
+            "threadSleepMilliseconds": 5000,
+            "components": [
+                {
+                    "name": "DS18B20",
+                    "settings": [
+                        {"name": "path", "value": "/sys/bus/w1/devices/"},
+                        {"name": "filePrefix", "value": "28-"},
+                        {"name": "threadCycles", "value": "1"}
+                    ]
+                }
+            ]
+        }
+    ],
     "internal_settings": [
         {"name": "MPU6050", "value": "0"},
         {"name": "MPU6050scanMilliseconds", "value": "400"},

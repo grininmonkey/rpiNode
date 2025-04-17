@@ -28,19 +28,24 @@
 // Base
 #define RPI_CONFIG_FILE "/etc/rpiNode/config.json"
 #define RPI_CONFIG_SERVE_PATH "/srv/rpiNode"
-#define RPI_MAX_TAGS 500                // Max number of Data Tags
+#define RPI_MAX_TAGS 1000               // Max number of Data Tags
 #define RPI_MAX_CMD_LENGTH 500
-#define RPI_MAX_META_ID 25
+#define RPI_MAX_META_ID 56
 #define RPI_MAX_SINGLES 10              // Max number of locals SingleValues
 #define RPI_MAX_META_DESC 255
 #define RPI_MAX_META_TYPE 25
 #define RPI_MAX_VALUE_LENGTH 255        // Max number of value characters
-#define RPI_MAX_VALUES_PER_OBJECT 10
 #define RPI_MAX_META_TIMESTAMP 22
 #define RPI_MAX_CONFIG_LINE_LENGTH 256
 #define RPI_MAX_INTERNAL_OBJECTS 10     // Max number of root internal objects
+#define RPI_MAX_VALUES_PER_OBJECT 10
 #define RPI_MAX_NAMEVALUE_NAME 256
 #define RPI_MAX_NAMEVALUE_VALUE 256
+
+#define RPI_MAX_DATACONTAINER_ID 56
+#define RPI_MAX_DATACOMPONENT_ID 56
+#define RPI_MAX_DATATAG_ID (RPI_MAX_DATACONTAINER_ID + RPI_MAX_DATACOMPONENT_ID + 58)
+#define RPI_MAX_DATA 250
 
 //---------------------------------------------------------------
 //  Mostly use Fixed structs for speed, cache and simplicity
@@ -75,6 +80,28 @@ typedef struct {
     MultiValue DS18B20[RPI_MAX_INTERNAL_OBJECTS];
 } Internal;
 //---------------------------------------------------------------
+// TOBE: New generic nested data structure
+//---------------------------------------------------------------
+typedef struct {
+    char Id[RPI_MAX_DATATAG_ID];
+    char type[RPI_MAX_META_TYPE];
+    char description[RPI_MAX_META_DESC];
+    char timestamp[RPI_MAX_META_TIMESTAMP];
+    char value[RPI_MAX_VALUE_LENGTH];
+} DataTag;
+
+typedef struct {
+    int tags_count;
+    char id[RPI_MAX_DATACOMPONENT_ID];
+	DataTag tags[RPI_MAX_VALUES_PER_OBJECT];
+} DataComponent;
+
+typedef struct {
+    int components_count;
+    char id[RPI_MAX_DATACONTAINER_ID];
+    DataComponent components[RPI_MAX_INTERNAL_OBJECTS];
+} DataContainer;
+//---------------------------------------------------------------
 //  External / Commands 
 //---------------------------------------------------------------
 typedef struct {
@@ -100,6 +127,7 @@ typedef struct {
     External external;
     SingleValue tags[RPI_MAX_TAGS];
     ServiceInfo *service_list;
+    DataContainer data[RPI_MAX_DATA];
     pthread_mutex_t lock;
 } SharedData;
 //---------------------------------------------------------------

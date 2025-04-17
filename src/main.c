@@ -31,6 +31,7 @@ SharedData rpiNode = {
         .currentValuesDBName = "current",
         .currentValuesViewName = "vValues"
     },
+    .data = {{0}},
     .internal.DS18B20 = {{0}},
     .internal_config = NULL,
     .service_list = NULL,
