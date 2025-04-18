@@ -4,8 +4,8 @@
 #include "../data/dataFree.h"
 #include "../db/dbInitalize.h"
 #include "../db/dbSaveValuesThread.h"
-#include "../network/http/serveHttp.h"
-#include "../network/mDNS/mDnsScan.h"
+#include "../network/http/httpServeThread.h"
+#include "../network/mDNS/mDnsScanServiceThread.h"
 // soon to be obsolete ....................
 #include "../sensors/DS18B20/readDS18B20.h"
 #include "../sensors/MPU6050/readMPU6050.h"
@@ -28,9 +28,9 @@ void* (*service_thread_functions[NUM_SERVICE_THREADS])(void*) = {
     //........................
     // Core threads
     //........................
-    serve_http,
+    http_serve_thread,
     db_save_values_thread,
-    scan_mdns_service,
+    mdns_scan_service_thread,
     //........................
     // Module Threads
     //........................

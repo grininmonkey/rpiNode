@@ -3,6 +3,6 @@
 
 #include <microhttpd.h>
 
-int handle_status(struct MHD_Connection *connection);
+int http_handle_status(struct MHD_Connection *connection);
 
 #endif

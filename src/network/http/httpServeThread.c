@@ -7,12 +7,12 @@
 #include "../../structs/rpiNode.h"
 #include "../../utils/signalHandler.h"
 #include "../../utils/sleepMs.h"
-#include "answerConnection.h"
-#include "../mDNS/mDnsService.h"
+#include "../mDNS/mDnsPublishService.h"
+#include "httpAnswerConnection.h"
 
 #define BROADCAST_SEND_COUNTER 4
 
-void* serve_http(void* arg) {
+void* http_serve_thread(void* arg) {
     //--------------------------------------------------------------------------
     // Vars
     //--------------------------------------------------------------------------
@@ -66,14 +66,14 @@ void* serve_http(void* arg) {
     //--------------------------------------------------------------------------
     struct MHD_Daemon *daemon;
     daemon = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, port, NULL, NULL,
-        (MHD_AccessHandlerCallback)&answer_connection, NULL, MHD_OPTION_END);
+        (MHD_AccessHandlerCallback)&http_answer_connection, NULL, MHD_OPTION_END);
 
     if (NULL == daemon) {
         printf("[NETWORK][%d]: http stopped, unable to start daemon\n", p_tid);
         return NULL;
     } 
     
-    if (publish_mDNS > 0 && publish_mdns_service(port, p_tid, service_name) != 0)
+    if (publish_mDNS > 0 && mdns_publish_service(port, p_tid, service_name) != 0)
         fprintf(stderr, "[NETWORK][%d]: Failed to publish mDNS service.\n", p_tid);
     //--------------------------------------------------------------------------
     // thread loop

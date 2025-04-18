@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "handleFile.h"
-#include "../queueErrorResponse.h"
+#include "httpHandleFile.h"
+#include "../httpQueueErrorResponse.h"
 #include "../../../utils/readFile.h"
 #include "../../../utils/strReplace.h"
 
-int handle_File(struct MHD_Connection *connection, char *filename, char *contentType) {
+int http_handle_File(struct MHD_Connection *connection, char *filename, char *contentType) {
     // -------------------------------------------------------------
     // Read the file
     // -------------------------------------------------------------
@@ -14,7 +14,7 @@ int handle_File(struct MHD_Connection *connection, char *filename, char *content
     if (!file_contents) {
         char error_msg[256];
         snprintf(error_msg, sizeof(error_msg), "Failed to load file: %s", filename);
-        return queue_error_response(connection, error_msg, MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return http_queue_error_response(connection, error_msg, MHD_HTTP_INTERNAL_SERVER_ERROR);
     }
     // -------------------------------------------------------------
     // Testing  TODO: setup parameter var processing 
@@ -25,7 +25,7 @@ int handle_File(struct MHD_Connection *connection, char *filename, char *content
     if (!final_output) {
         char error_msg[256];
         snprintf(error_msg, sizeof(error_msg), "Failed to process file: %s", filename);
-        return queue_error_response(connection, error_msg, MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return http_queue_error_response(connection, error_msg, MHD_HTTP_INTERNAL_SERVER_ERROR);
     }
     // -------------------------------------------------------------
     // Create response

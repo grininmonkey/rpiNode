@@ -12,7 +12,7 @@
 
 #define SERVICE_TYPE "_rpinode._tcp"
 
-void* scan_mdns_service(void *arg) {
+void* mdns_scan_service_thread(void *arg) {
     //--------------------------------------------------------------------------
     // Run Check
     //--------------------------------------------------------------------------

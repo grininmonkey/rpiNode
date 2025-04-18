@@ -1,4 +1,4 @@
-#include "mDnsService.h"
+#include "mDnsPublishService.h"
 #include <avahi-client/client.h>
 #include <avahi-client/publish.h>
 #include <avahi-common/error.h>
@@ -44,7 +44,7 @@ static void client_callback(AvahiClient *c, AvahiClientState state, void *userda
     }
 }
 
-int publish_mdns_service(uint16_t port, pid_t t_pid, char *service_name) {
+int mdns_publish_service(uint16_t port, pid_t t_pid, char *service_name) {
 
     int error;
     pid_t *t_pid_ptr = malloc(sizeof(pid_t));

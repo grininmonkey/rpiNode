@@ -1,10 +1,10 @@
 #include <string.h>
 #include <jansson.h>
-#include "handleStatus.h"
+#include "httpHandleStatus.h"
 #include "../../../structs/rpiNode.h"
 #include "../../../utils/getTimeStamp.h"
 
-int handle_status(struct MHD_Connection *connection) {
+int http_handle_status(struct MHD_Connection *connection) {
     //------------------------------------------------------------------------
     // Create json
     //------------------------------------------------------------------------
