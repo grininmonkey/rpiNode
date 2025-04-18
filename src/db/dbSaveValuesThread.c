@@ -1,12 +1,12 @@
 #include <stdio.h>       // for printf()
 #include <unistd.h>      // for syscall()
 #include <sys/syscall.h> // for SYS_gettid
-#include "saveTags.h"
-#include "../../utils/sleepMs.h"
-#include "../../structs/rpiNode.h"
-#include "../../utils/signalHandler.h"
+#include "dbWriteTags.h"
+#include "../utils/sleepMs.h"
+#include "../structs/rpiNode.h"
+#include "../utils/signalHandler.h"
 
-void *write_to_db(void *args) {
+void *db_save_values_thread(void *args) {
     int counter = 0;
     int trigger_interval = 2 * 10; // 10 loops/sec default 2s
     pid_t t_pid = syscall(SYS_gettid);
@@ -29,7 +29,7 @@ void *write_to_db(void *args) {
         pthread_mutex_unlock(&lock);
 
         if (counter % trigger_interval == 0)
-            save_tags(t_pid);
+            db_write_tags(t_pid);
 
         counter = (counter + 1) % 1000000;
         sleep_ms(100);

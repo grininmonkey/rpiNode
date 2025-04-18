@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "../config/configFileRead.h"
-#include "../data/freeData.h"
-#include "../local/db/initDB.h"
-#include "../local/db/writeToDB.h"
+#include "../data/dataFree.h"
+#include "../db/dbInitalize.h"
+#include "../db/dbSaveValuesThread.h"
 #include "../network/http/serveHttp.h"
 #include "../network/mDNS/mDnsScan.h"
 // soon to be obsolete ....................
@@ -29,7 +29,7 @@ void* (*service_thread_functions[NUM_SERVICE_THREADS])(void*) = {
     // Core threads
     //........................
     serve_http,
-    write_to_db,
+    db_save_values_thread,
     scan_mdns_service,
     //........................
     // Module Threads
@@ -55,7 +55,7 @@ void service_launch_threads(int argc, char *argv[], pid_t m_pid) {
     if (
         config_file_read(m_pid) 
         && setTmpfs(m_pid)
-        && initializeDB(m_pid)
+        && db_initalize(m_pid)
     ) {
 
         pthread_t threads[NUM_SERVICE_THREADS];
@@ -79,7 +79,7 @@ void service_launch_threads(int argc, char *argv[], pid_t m_pid) {
     //--------------------------------------------
     // Free memory allocations etc...
     //--------------------------------------------
-    free_data();
+    data_free();
     namevalue_free_all(rpiNode.internal_config);
     //--------------------------------------------
     // Exit msg

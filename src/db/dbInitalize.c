@@ -3,9 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sqlite3.h>
-#include "../../structs/rpiNode.h"
+#include "../structs/rpiNode.h"
 
-int initializeDB(pid_t pid) {
+int db_initalize(pid_t pid) {
     sqlite3 *db;
     char *errMsg = 0;
     char buffer[500];

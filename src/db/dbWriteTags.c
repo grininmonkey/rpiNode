@@ -1,10 +1,10 @@
 
 #include <stdio.h>
 #include <sqlite3.h>
-#include "../../structs/rpiNode.h"
-#include "../../utils/updateTags.h"
+#include "../structs/rpiNode.h"
+#include "../utils/updateTags.h"
 
-int save_tags(pid_t t_pid) {
+int db_write_tags(pid_t t_pid) {
     //-----------------------------------------------------------------
     //Read and Set locals from config
     //-----------------------------------------------------------------
