@@ -1,44 +1,14 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <jansson.h>
-#include "readConfigFile.h"
+#include "configHelpers.h"
+#include "configFileRead.h"
+#include "configDataModules.h"
 #include "../structs/rpiNode.h"
 #include "../utils/nameValue.h"
+#include "configFileCompleted.h"
 
-int test_string(const char *name, json_t *obj, int MAX) {
-    if (json_is_string(obj)) {
-        if (INT_GT_ZERO_AND_LE(strlen(json_string_value(obj)), MAX)) {
-            return 1;
-        } else {
-            fprintf(stderr, 
-                "[main][%d]: config <%s> length (%i) > max length (%i)\n",
-                getpid(), name, strlen(json_string_value(obj)), MAX
-            );
-        }
-    }
-    return 0;
-}
-
-const char* get_string(const char *name, const char *current, json_t *new, int MAX) {
-    if (test_string(name, new, MAX))
-        return json_string_value(new);
-    return current;
-}
-
-int get_true_false(int current, json_t *obj) {
-    if (json_is_integer(obj))
-        return INT_TRUE_FALSE(json_integer_value(obj));
-    return current;
-}
-
-int get_integer(int current, json_t *obj) {
-    if (json_is_integer(obj))
-        return json_integer_value(obj);
-    return current;
-}
-
-int read_config_file(pid_t pid) {
+int config_file_read(pid_t pid) {
     json_t *root;
     json_error_t error;
     //-----------------------------------------------------------
@@ -57,7 +27,6 @@ int read_config_file(pid_t pid) {
     json_t *http = json_object_get(root, "http");
     json_t *mDNS = json_object_get(root, "mDNS");
     json_t *master = json_object_get(root, "master");
-    json_t *internal = json_object_get(root, "internal");
     json_t *saveToDB = json_object_get(root, "saveToDB");
     json_t *httpPort = json_object_get(root, "httpPort");
     json_t *useTmpfs = json_object_get(root, "useTmpfs");
@@ -98,7 +67,6 @@ int read_config_file(pid_t pid) {
     } else {
         snprintf(rpiNode.config.currentValuesDB, CONFIG_MAX_DB, "%s/%s.db", RPI_CONFIG_SERVE_PATH, rpiNode.config.currentValuesDBName);
     }
-
     //-----------------------------------------------------------------
     // Soon to be removed
     //-----------------------------------------------------------------
@@ -114,70 +82,18 @@ int read_config_file(pid_t pid) {
             }
         }
     //-----------------------------------------------------------------
-    // TODO: dataModules pre populating rpiNode.data with 
+    // DataModules pre populating rpiNode.data with 
     // DataModule Struct chain
     //-----------------------------------------------------------------
-    if (json_is_array(dataModules)) {
-        size_t module_index, component_index, nv_index;
-        json_t  *element, *sub_element, *nv_element, *m_name, *c_name, *s_name,
-                *value, *start, *verbose, *uniqueId, *components, *settings;
-        json_array_foreach(dataModules, module_index, element) {
-            m_name = json_object_get(element, "name");
-            start = json_object_get(element, "start");
-            verbose = json_object_get(element, "verbose");
-            uniqueId = json_object_get(element, "uniqueId");
-            components = json_object_get(element, "components");
-            // Add/Set Module entry into array
-            // ...
-            if (json_is_array(components)) {
-                json_array_foreach(components, component_index, sub_element) {
-                    c_name = json_object_get(sub_element, "name");
-                    settings = json_object_get(sub_element, "settings");
-                    // Add/Set component entry into module[index].component[index]array
-                    // ...
-                    if (json_is_array(settings)) {
-                        json_array_foreach(settings, nv_index, nv_element) {
-                            s_name = json_object_get(nv_element, "name");
-                            value = json_object_get(nv_element, "value");
-                            // Add/set to settings pointer list
-                            printf("data[%i].components[%i].settings[%i].name=%s\n", module_index, component_index, nv_index, json_string_value(s_name));
-            
-                        }
-                    }
-                }
-            }
-        }
-    }
+    config_data_modules(dataModules);
+
     pthread_mutex_unlock(&rpiNode.lock);
     //-----------------------------------------------------------
     // Free memory & complete
     //-----------------------------------------------------------
-    
     json_decref(root);
 
-    printf("[main][%d]: Config loaded successfully\n", pid);
-    printf("[main][%d]:\t\t# id: %s\n", pid, rpiNode.config.id);
-    printf("[main][%d]:\t\t# clusterID: %s\n", pid, rpiNode.config.clusterID);
-    printf("[main][%d]:\t\t# http: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.http));
-    printf("[main][%d]:\t\t# mDNS: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.mDNS));
-    printf("[main][%d]:\t\t# master: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.master));
-    printf("[main][%d]:\t\t# saveToDB: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.saveToDB));
-    printf("[main][%d]:\t\t# useTmpfs: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.useTmpfs));
-    printf("[main][%d]:\t\t# httpPort: %i\n", pid, rpiNode.config.httpPort);
-    printf("[main][%d]:\t\t# broadcast: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.broadcast));
-    printf("[main][%d]:\t\t# tmpfsSize: %i\n", pid, rpiNode.config.tmpfsSize);
-    printf("[main][%d]:\t\t# broadcastIP: %s\n", pid, rpiNode.config.broadcastIP);
-    printf("[main][%d]:\t\t# broadcastPort: %i\n", pid, rpiNode.config.broadcastPort);
-    printf("[main][%d]:\t\t# tmpfsFolderName: %s\n", pid, rpiNode.config.tmpfsFolderName);
-    printf("[main][%d]:\t\t# updateDBSeconds: %i\n", pid, rpiNode.config.updateDBSeconds);
-    printf("[main][%d]:\t\t# currentValuesDB: %s\n", pid, rpiNode.config.currentValuesDB);
-    printf("[main][%d]:\t\t# currentValuesDBName: %s\n", pid, rpiNode.config.currentValuesDBName);
-   
-    NameValue *current = rpiNode.internal_config;
-    while (current != NULL) {
-        printf("[main][%d]:\t\t# %s: %s\n", pid, current->name, current->value);
-        current = current->next;
-    }
+    config_file_completed(pid);
 
     return 1;
 

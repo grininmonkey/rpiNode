@@ -72,6 +72,7 @@ void namevalue_free_all(NameValue *head) {
     NameValue *temp;
     while (head != NULL) {
         temp = head;
+        printf("free: %s\n",head->name);
         head = head->next;
         free(temp);
     }

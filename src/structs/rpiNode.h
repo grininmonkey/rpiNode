@@ -96,6 +96,7 @@ typedef struct {
 } DataComponent;
 
 typedef struct {
+    int flag;
     int start;
     int verbose;
     int uniqueId;
@@ -109,6 +110,7 @@ typedef struct {
 //---------------------------------------------------------------
 typedef struct {
     int tags_count;
+    int data_count;
     Config config;
     NameValue *internal_config;
     Internal internal;

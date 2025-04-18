@@ -47,38 +47,42 @@ fi
 # Map source files to desired object files
 declare -A FILE_MAP=(
     [main.c]=main.o
-    [utils/sleepMs.c]=sleepMs.o
+    [config/configHelpers.c]=configHelpers.o
+    [config/configFileRead.c]=configFileRead.o
+    [config/configDataModules.c]=configDataModules.o
+    [config/configFileCompleted.c]=configFileCompleted.o
+    [data/freeData.c]=freeData.o
     [local/db/initDB.c]=initDB.o
+    [local/db/saveTags.c]=saveTags.o
+    [local/db/writeToDB.c]=writeToDB.o
+    [network/mDNS/mDnsScan.c]=mDnsScan.o
+    [network/http/serveHttp.c]=serveHttp.o
+    [network/mDNS/mDnsService.c]=mDnsService.o
+    [network/http/routeRequest.c]=routeRequest.o
+    [network/http/handlers/handleFile.c]=handleFile.o
+    [network/http/answerConnection.c]=answerConnection.o
+    [network/http/handlers/handleStatus.c]=handleStatus.o
+    [network/mDNS/mDnsScanCallbacks.c]=mDnsScanCallbacks.o
+    [network/mDNS/mDnsScanUpdateList.c]=mDnsScanUpdateList.o
+    [network/http/queueErrorResponse.c]=queueErrorResponse.o
+    [sensors/DS18B20/readSlave.c]=readSlave.o
+    [sensors/MPU6050/readMPU6050.c]=readMPU6050.o
+    [sensors/DS18B20/readDS18B20.c]=readDS18B20.o
+    [sensors/MPU6050/assignValues.c]=assignValues.o
+    [sensors/MPU6050/calculateAngles.c]=calculateAngles.o
+    [sensors/DS18B20/scanForW1Devices.c]=scanForW1Devices.o
+    [sensors/MPU6050/smoothingMovingAverage.c]=smoothingMovingAverage.o
+    [utils/sleepMs.c]=sleepMs.o
     [utils/readFile.c]=readFile.o
     [utils/setTmpfs.c]=setTmpfs.o
     [utils/nameValue.c]=nameValue.o
-    [local/db/saveTags.c]=saveTags.o
     [utils/updateTags.c]=updateTags.o
     [utils/strReplace.c]=strReplace.o
-    [local/db/writeToDB.c]=writeToDB.o
-    [network/mDNS/mDnsScan.c]=mDnsScan.o
     [utils/getTimeStamp.c]=getTimeStamp.o
-    [network/http/serveHttp.c]=serveHttp.o
     [utils/signalHandler.c]=signalHandler.o
     [utils/getLineFromCmd.c]=getLineFromCmd.o
     [utils/getLocalIPList.c]=getLocalIPList.o
     [utils/setSharedValue.c]=setSharedValue.o
-    [sensors/DS18B20/readSlave.c]=readSlave.o
-    [config/readConfigFile.c]=readConfigFile.o
-    [network/mDNS/mDnsService.c]=mDnsService.o
-    [network/http/routeRequest.c]=routeRequest.o
-    [sensors/MPU6050/readMPU6050.c]=readMPU6050.o
-    [sensors/DS18B20/readDS18B20.c]=readDS18B20.o
-    [sensors/MPU6050/assignValues.c]=assignValues.o
-    [network/http/handlers/handleFile.c]=handleFile.o
-    [network/http/answerConnection.c]=answerConnection.o
-    [network/http/handlers/handleStatus.c]=handleStatus.o
-    [sensors/MPU6050/calculateAngles.c]=calculateAngles.o
-    [network/mDNS/mDnsScanCallbacks.c]=mDnsScanCallbacks.o
-    [sensors/DS18B20/scanForW1Devices.c]=scanForW1Devices.o
-    [network/mDNS/mDnsScanUpdateList.c]=mDnsScanUpdateList.o
-    [network/http/queueErrorResponse.c]=queueErrorResponse.o
-    [sensors/MPU6050/smoothingMovingAverage.c]=smoothingMovingAverage.o
 )
 
 OBJ_FILES=()
@@ -105,9 +109,9 @@ echo -e "\n"
 # TO-BE REMOVED Soon TM ----------------
 #---------------------------------------
 if [ "$1" == "run-mem" ]; then
-    sudo valgrind --suppressions=valgrind.supp ../rpiNode --daemon
+    sudo valgrind --suppressions=valgrind.supp ../rpiNode --service
 fi
 
 if [[ "$1" == "run" ]]; then
-    sudo ../rpiNode --daemon
+    sudo ../rpiNode --service
 fi
