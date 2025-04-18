@@ -14,7 +14,7 @@
 #include "../utils/setTmpfs.h"
 #include "../utils/nameValue.h"
 #include "../utils/signalHandler.h"
-
+#include "../utils/verbosePrintf.h"
 //---------------------------------------------------------------
 // Define the number of threads to launch
 //---------------------------------------------------------------
@@ -48,7 +48,7 @@ void service_launch_threads(int argc, char *argv[], pid_t m_pid) {
     //--------------------------------------------
     // Start msg
     //--------------------------------------------
-    printf("[main][%d]: Started\n", m_pid);
+    verbose_printf("[main][%d]: Started\n", m_pid);
     //--------------------------------------------
     // Initialize and Launch Service Threads
     //--------------------------------------------
@@ -84,6 +84,6 @@ void service_launch_threads(int argc, char *argv[], pid_t m_pid) {
     //--------------------------------------------
     // Exit msg
     //--------------------------------------------
-    printf("[main][%d]: Stopped\n", m_pid);
+    verbose_printf("[main][%d]: Stopped\n", m_pid);
 
 }

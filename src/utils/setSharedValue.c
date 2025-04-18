@@ -23,10 +23,10 @@ void set_shared_multivalue(
     //-----------------------------------------------------------------
     /*
     if (obj_index != SINGLE_INSTANCE) {
-        if (obj_index >= 0 && obj_index < RPI_MAX_INTERNAL_OBJECTS) {
+        if (obj_index >= 0 && obj_index < RPI_MAX_COMPONENTS) {
             target = &obj[obj_index];
         } else {
-            fprintf(stderr, "Warning: obj_index %d out of bounds (max: %d)\n", obj_index, RPI_MAX_INTERNAL_OBJECTS);
+            fprintf(stderr, "Warning: obj_index %d out of bounds (max: %d)\n", obj_index, RPI_MAX_COMPONENTS);
             return;
         }
     } 
@@ -34,7 +34,7 @@ void set_shared_multivalue(
     //-----------------------------------------------------------------
     // 'target' is safe to use
     //-----------------------------------------------------------------
-    if (value_index >= 0 && value_index < RPI_MAX_VALUES_PER_OBJECT && id) {
+    if (value_index >= 0 && value_index < RPI_MAX_COMPONENT_TAGS && id) {
         SingleValue *val = &target->values[value_index];
         pthread_mutex_lock(&rpiNode.lock);
         SAFE_STRCPY(val->info.id, id);

@@ -17,14 +17,14 @@
     "updateDBSeconds": 2,
     "dataModules": [
         {
-            "uniqueId": 1000,
-            "name": "EXAMPLE",
+            "moduleId": 1000,
+            "tagPathName": "EXAMPLE",
             "start": 0,
             "verbose": 1,
             "threadSleepMilliseconds": 500,
             "components": [
                 {
-                    "name": "DUMMY",
+                    "tagPathName": "DUMMY",
                     "settings": [
                         {"name": "mySetting1", "value": "Hello"},
                         {"name": "mySetting2", "value": "PI"}
@@ -33,14 +33,14 @@
             ]
         },
         {
-            "uniqueId": 1001,
-            "name": "F_VALUE",
+            "moduleId": 1001,
+            "tagPathName": "F_VALUE",
             "start": 0,
             "verbose": 0,
             "threadSleepMilliseconds": 5000,
             "components": [
                 {
-                    "name": "DS18B20",
+                    "tagPathName": "DS18B20",
                     "settings": [
                         {"name": "path", "value": "/sys/bus/w1/devices/"},
                         {"name": "filePrefix", "value": "28-"},
@@ -50,14 +50,14 @@
             ]
         },
         {
-            "uniqueId": 1002,
-            "name": "SENSORS",
+            "moduleId": 1002,
+            "tagPathName": "SENSORS",
             "start": 0,
             "verbose": 0,
             "threadSleepMilliseconds": 400,
             "components": [
                 {
-                    "name": "MPU6050",
+                    "tagPathName": "MPU6050",
                     "settings": []
                 }
             ]            

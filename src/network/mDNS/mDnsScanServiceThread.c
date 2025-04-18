@@ -8,6 +8,7 @@
 #include <avahi-common/defs.h>
 #include "../../structs/rpiNode.h"
 #include "../../utils/signalHandler.h"
+#include "../../utils/verbosePrintf.h"
 #include "mDnsScanCallbacks.h"
 
 #define SERVICE_TYPE "_rpinode._tcp"
@@ -29,7 +30,7 @@ void* mdns_scan_service_thread(void *arg) {
     AvahiServiceBrowser *sb;
 
     // stdout Notification
-    printf("[mDNS][%d]: Started\n", t_pid);
+    verbose_mutex_printf("[mDNS][%d]: Started\n", t_pid);
 
     pthread_mutex_lock(&lock);
     //--------------------------------------------------------------------------
@@ -92,7 +93,7 @@ void* mdns_scan_service_thread(void *arg) {
     //--------------------------------------------------------------------------
     //  Complete
     //--------------------------------------------------------------------------
-    printf("[mDNS][%d]: Stopped\n", t_pid);
+    verbose_mutex_printf("[mDNS][%d]: Stopped\n", t_pid);
 
     return NULL;
 

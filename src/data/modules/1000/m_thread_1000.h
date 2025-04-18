@@ -28,7 +28,7 @@ typedef struct {
     int components_count;                                   // Required: Do not remove
     int threadSleepMilliseconds;                            // Required: Do not remove
     char name[RPI_MAX_DATACONTAINER_NAME];                  // Required: Do not remove
-    M1000_Component components[RPI_MAX_INTERNAL_OBJECTS];   // Required: Do not remove
+    M1000_Component components[RPI_MAX_COMPONENTS];   // Required: Do not remove
 } M1000_Config; // Make sure to set number e.g. M1043_Config
 //-------------------------------------------------------------
 // Init function for the module

@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <unistd.h>      // for syscall()
 #include <sys/syscall.h> // for SYS_gettid
+#include "../../utils/verbosePrintf.h"
 
 // Store globals for cleanup
 static AvahiThreadedPoll *avahi_poll = NULL;
@@ -18,7 +19,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
     pid_t *thread_id = (pid_t *)userdata;
     switch (state) {
         case AVAHI_ENTRY_GROUP_ESTABLISHED:
-            printf("[NETWORK][%d]: Avahi service successfully established\n", *thread_id);
+            verbose_printf("[NETWORK][%d]: Avahi service successfully established\n", *thread_id);
             break;
         case AVAHI_ENTRY_GROUP_COLLISION:
             fprintf(stderr, "[NETWORK][%d]: Avahi service name collision\n", *thread_id);
@@ -88,14 +89,14 @@ int mdns_publish_service(uint16_t port, pid_t t_pid, char *service_name) {
         return -1;
     }
 
-    printf("[NETWORK][%d]: Starting Avahi threaded poll...\n", *t_pid_ptr);
+    verbose_printf("[NETWORK][%d]: Starting Avahi threaded poll...\n", *t_pid_ptr);
     avahi_threaded_poll_start(avahi_poll);
 
     return 0;
 }
 
 void stop_mdns_service(pid_t t_pid) {
-    printf("[NETWORK][%d]: Stopping Avahi service...\n", t_pid);
+    verbose_printf("[NETWORK][%d]: Stopping Avahi service...\n", t_pid);
 
     if (avahi_poll) {
         avahi_threaded_poll_stop(avahi_poll);

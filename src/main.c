@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "structs/rpiNode.h"
 #include "utils/signalHandler.h"
+#include "utils/hasArgument.h"
 #include "client/clientRouteInput.h"
 #include "service/serviceLaunchThreads.h"
 //--------------------------------------------------------------------------------
@@ -33,12 +34,14 @@ SharedData rpiNode = {
 //--------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
     //-----------------------------------------------
-    // Command line check
+    // Command line check & assigments
     //-----------------------------------------------
     if (argc < 2) {
         client_route_input_usage(argc, argv);
         return 1;
     }
+
+    rpiNode.verbose = has_arg(argc, argv, "-v");
     //-----------------------------------------------
     // Get main process ID
     //-----------------------------------------------
@@ -51,7 +54,7 @@ int main(int argc, char *argv[]) {
     //-----------------------------------------------
     // Route to Service or Client funcs
     //-----------------------------------------------
-    if (strcmp(argv[1], "--service") == 0) {
+    if (has_arg(argc, argv, "--service") == 1) {
         service_launch_threads(argc, argv, m_pid);
     } else {
         client_route_input(argc, argv);

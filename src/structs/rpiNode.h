@@ -32,8 +32,8 @@
 #define RPI_MAX_VALUE_LENGTH 255        // Max number of value characters
 #define RPI_MAX_META_TIMESTAMP 22
 #define RPI_MAX_CONFIG_LINE_LENGTH 256
-#define RPI_MAX_INTERNAL_OBJECTS 10     // Max number of root internal objects
-#define RPI_MAX_VALUES_PER_OBJECT 10
+#define RPI_MAX_COMPONENTS 10           
+#define RPI_MAX_COMPONENT_TAGS 10
 #define RPI_MAX_NAMEVALUE_NAME 256
 #define RPI_MAX_NAMEVALUE_VALUE 256
 
@@ -59,7 +59,7 @@ typedef struct {
 
 typedef struct {
     int values_count;
-	SingleValue values[RPI_MAX_VALUES_PER_OBJECT];
+	SingleValue values[RPI_MAX_COMPONENT_TAGS];
 } MultiValue;
 //---------------------------------------------------------------
 //  Generic NameValue Pointer List
@@ -75,13 +75,13 @@ typedef struct NameValue {
 typedef struct {
     int DS18B20_count;
     MultiValue MPU6050;
-    MultiValue DS18B20[RPI_MAX_INTERNAL_OBJECTS];
+    MultiValue DS18B20[RPI_MAX_COMPONENTS];
 } Internal;
 //---------------------------------------------------------------
 // More generic data structure  (TOBE)
 //---------------------------------------------------------------
 typedef struct {
-    char Id[RPI_MAX_DATATAG_ID];
+    char id[RPI_MAX_DATATAG_ID];
     char type[RPI_MAX_META_TYPE];
     char description[RPI_MAX_META_DESC];
     char timestamp[RPI_MAX_META_TIMESTAMP];
@@ -90,25 +90,26 @@ typedef struct {
 
 typedef struct {
     int tags_count;
-    char name[RPI_MAX_DATACOMPONENT_NAME];
+    char tagPathName[RPI_MAX_DATACOMPONENT_NAME];
     NameValue *settings;
-	DataTag tags[RPI_MAX_VALUES_PER_OBJECT];
+	DataTag tags[RPI_MAX_COMPONENT_TAGS];
 } DataComponent;
 
 typedef struct {
     int flag;
     int start;
     int verbose;
-    int uniqueId;
+    int moduleId;
     int components_count;
     int threadSleepMilliseconds;
-    char name[RPI_MAX_DATACONTAINER_NAME];
-    DataComponent components[RPI_MAX_INTERNAL_OBJECTS];
+    char tagPathName[RPI_MAX_DATACONTAINER_NAME];
+    DataComponent components[RPI_MAX_COMPONENTS];
 } DataModule;
 //---------------------------------------------------------------
 //  Final Structure
 //---------------------------------------------------------------
 typedef struct {
+    int verbose;
     int tags_count;
     int data_count;
     Config config;

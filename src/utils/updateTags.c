@@ -25,7 +25,7 @@ int update_tags() {
     // -------------------------------------------------------------------------------
     // DS18B20 values
     // -------------------------------------------------------------------------------
-    for (int d_Index = 0; d_Index < RPI_MAX_INTERNAL_OBJECTS; d_Index++) {
+    for (int d_Index = 0; d_Index < RPI_MAX_COMPONENTS; d_Index++) {
         for (int z = 0; z < rpiNode.internal.DS18B20[d_Index].values_count; z++) {
             SingleValue *v = &rpiNode.internal.DS18B20[d_Index].values[z];
             index = copy_singlevalue_to_tags(v, rpiNode.tags, index);

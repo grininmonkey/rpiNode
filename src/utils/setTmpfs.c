@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "../structs/rpiNode.h"
+#include "verbosePrintf.h"
 
 int setTmpfs(pid_t pid) {
 
@@ -15,7 +16,7 @@ int setTmpfs(pid_t pid) {
     umount(mount_point);
     if (rpiNode.config.useTmpfs != 1) {
         pthread_mutex_unlock(&rpiNode.lock);
-        printf("[main][%d]: useTmpfs=false, not creating tmpfs...\n", pid);
+        verbose_printf("[main][%d]: useTmpfs=false, not creating tmpfs...\n", pid);
         return 1; 
     }
     pthread_mutex_unlock(&rpiNode.lock);
@@ -36,7 +37,7 @@ int setTmpfs(pid_t pid) {
         return 0;
     }
 
-    printf("[main][%d]: tmpfs mounted successfully at %s\n", pid, mount_point);
+    verbose_mutex_printf("[main][%d]: tmpfs mounted successfully at %s\n", pid, mount_point);
     
     return 1;
 }

@@ -5,6 +5,7 @@
 #include "../utils/sleepMs.h"
 #include "../structs/rpiNode.h"
 #include "../utils/signalHandler.h"
+#include "../utils/verbosePrintf.h"
 
 void *db_save_values_thread(void *args) {
     int counter = 0;
@@ -17,7 +18,7 @@ void *db_save_values_thread(void *args) {
         return NULL;
     }
     trigger_interval = rpiNode.config.updateDBSeconds * 10; // 10 loops/sec
-    printf("[DB][%d]: Started -> write to DB every (%i)s\n", t_pid, rpiNode.config.updateDBSeconds);
+    verbose_printf("[DB][%d]: Started -> write to DB every (%i)s\n", t_pid, rpiNode.config.updateDBSeconds);
     pthread_mutex_unlock(&rpiNode.lock); 
 
     while (1) {
@@ -35,7 +36,7 @@ void *db_save_values_thread(void *args) {
         sleep_ms(100);
     }
 
-    printf("[DB][%d]: Write to DB Stopped\n", t_pid);
+    verbose_mutex_printf("[DB][%d]: Write to DB Stopped\n", t_pid);
 
     return NULL;
 }

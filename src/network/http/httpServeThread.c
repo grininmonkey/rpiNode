@@ -6,6 +6,7 @@
 #include <sys/syscall.h>
 #include "../../structs/rpiNode.h"
 #include "../../utils/signalHandler.h"
+#include "../../utils/verbosePrintf.h"
 #include "../../utils/sleepMs.h"
 #include "../mDNS/mDnsPublishService.h"
 #include "httpAnswerConnection.h"
@@ -60,7 +61,7 @@ void* http_serve_thread(void* arg) {
         }
     }
     // stdout Notification
-    printf("[NETWORK][%d]: http started on port(%i)\n", p_tid, port);
+    verbose_mutex_printf("[NETWORK][%d]: http started on port(%i)\n", p_tid, port);
     //--------------------------------------------------------------------------
     // Start Micro HTTP daemon-server & mDNS
     //--------------------------------------------------------------------------
@@ -69,7 +70,7 @@ void* http_serve_thread(void* arg) {
         (MHD_AccessHandlerCallback)&http_answer_connection, NULL, MHD_OPTION_END);
 
     if (NULL == daemon) {
-        printf("[NETWORK][%d]: http stopped, unable to start daemon\n", p_tid);
+        verbose_mutex_printf("[NETWORK][%d]: http stopped, unable to start daemon\n", p_tid);
         return NULL;
     } 
     
@@ -103,7 +104,7 @@ void* http_serve_thread(void* arg) {
     close(sockfd);
     stop_mdns_service(p_tid);
     MHD_stop_daemon(daemon);
-    printf("[NETWORK][%d]: Stopped\n", p_tid);
-
+    verbose_mutex_printf("[NETWORK][%d]: Stopped\n", p_tid);
+ 
     return NULL;
 }

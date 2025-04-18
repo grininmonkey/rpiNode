@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sqlite3.h>
 #include "../structs/rpiNode.h"
+#include "../utils/verbosePrintf.h"
 
 int db_initalize(pid_t pid) {
     sqlite3 *db;
@@ -13,27 +14,26 @@ int db_initalize(pid_t pid) {
 
     // Open (or create) the database 
     pthread_mutex_lock(&rpiNode.lock);
-    rpiNode.config.DBcreated = 0;
+        rpiNode.config.DBcreated = 0;
 
-    if (rpiNode.config.saveToDB != 1) {
-        pthread_mutex_unlock(&rpiNode.lock);
-        return 1;
-    }
+        if (rpiNode.config.saveToDB != 1) {
+            pthread_mutex_unlock(&rpiNode.lock);
+            return 1;
+        }
 
-    if (rpiNode.config.useTmpfs != 1)
-        if (access(rpiNode.config.currentValuesDB, F_OK) == 0)
-            remove(rpiNode.config.currentValuesDB);
-            
-    snprintf(buffer, sizeof(buffer), "%s", rpiNode.config.currentValuesDB);
-    rc = sqlite3_open(buffer, &db);
-    if (rc) {
-        fprintf(stderr, "[main][%d]: Can't open database: %s\n", pid, sqlite3_errmsg(db));
-        return 0;
-    } else {
-        rpiNode.config.DBcreated = 1;
-        printf("[main][%d]: Opened/Created DB: %s\n", pid, buffer);
-    }
-    
+        if (rpiNode.config.useTmpfs != 1)
+            if (access(rpiNode.config.currentValuesDB, F_OK) == 0)
+                remove(rpiNode.config.currentValuesDB);
+                
+        snprintf(buffer, sizeof(buffer), "%s", rpiNode.config.currentValuesDB);
+        rc = sqlite3_open(buffer, &db);
+        if (rc) {
+            fprintf(stderr, "[main][%d]: Can't open database: %s\n", pid, sqlite3_errmsg(db));
+            return 0;
+        } else {
+            rpiNode.config.DBcreated = 1;
+            verbose_printf("[main][%d]: Opened/Created DB: %s\n", pid, buffer);
+        }
     pthread_mutex_unlock(&rpiNode.lock);
 
     // SQL statements
@@ -83,7 +83,7 @@ int db_initalize(pid_t pid) {
         pthread_mutex_unlock(&rpiNode.lock);
         return 0;
     } else {
-        printf("[main][%d]: Table, view, and trigger created successfully\n", pid);
+        verbose_mutex_printf("[main][%d]: Table, view, and trigger created successfully\n", pid);
     }
 
     // Close the database
