@@ -47,6 +47,7 @@ fi
 # Map source files to desired object files
 declare -A FILE_MAP=(
     [main.c]=main.o
+    [client/clientRouteInput.c]=clientRouteInput.o
     [config/configHelpers.c]=configHelpers.o
     [config/configFileRead.c]=configFileRead.o
     [config/configDataModules.c]=configDataModules.o
@@ -72,6 +73,7 @@ declare -A FILE_MAP=(
     [sensors/MPU6050/calculateAngles.c]=calculateAngles.o
     [sensors/DS18B20/scanForW1Devices.c]=scanForW1Devices.o
     [sensors/MPU6050/smoothingMovingAverage.c]=smoothingMovingAverage.o
+    [service/serviceLaunchThreads.c]=serviceLaunchThreads.o
     [utils/sleepMs.c]=sleepMs.o
     [utils/readFile.c]=readFile.o
     [utils/setTmpfs.c]=setTmpfs.o
