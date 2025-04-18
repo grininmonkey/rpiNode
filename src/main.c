@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     // Command line check
     //-----------------------------------------------
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s --service | --get-tag node-id=<nodeID> tag-id=<tagID> ....\n", argv[0]);
+        client_route_input_usage(argc, argv);
         return 1;
     }
     //-----------------------------------------------
