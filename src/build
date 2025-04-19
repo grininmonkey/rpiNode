@@ -87,6 +87,7 @@ declare -A FILE_MAP=(
     [utils/getLineFromCmd.c]=getLineFromCmd.o
     [utils/getLocalIPList.c]=getLocalIPList.o
     [utils/setSharedValue.c]=setSharedValue.o
+    [utils/checkServiceRunning.c]=checkServiceRunning.o
 )
 
 OBJ_FILES=()

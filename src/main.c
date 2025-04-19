@@ -3,6 +3,7 @@
 #include "structs/rpiNode.h"
 #include "utils/signalHandler.h"
 #include "utils/hasArgument.h"
+#include "utils/checkServiceRunning.h"
 #include "client/clientRouteInput.h"
 #include "service/serviceLaunchThreads.h"
 //--------------------------------------------------------------------------------
@@ -55,6 +56,10 @@ int main(int argc, char *argv[]) {
     // Route to Service or Client funcs
     //-----------------------------------------------
     if (has_arg(argc, argv, "--service") == 1) {
+        if (check_service_running(m_pid)) {
+            printf("Already running a service instance!\n");
+            return 0;
+        }
         service_launch_threads(argc, argv, m_pid);
     } else {
         client_route_input(argc, argv);
