@@ -15,6 +15,7 @@
 #include "../utils/nameValue.h"
 #include "../utils/signalHandler.h"
 #include "../utils/verbosePrintf.h"
+#include "../utils/checkServiceRunning.h"
 //---------------------------------------------------------------
 // Define the number of threads to launch
 //---------------------------------------------------------------
@@ -42,9 +43,12 @@ void* (*service_thread_functions[NUM_SERVICE_THREADS])(void*) = {
 //---------------------------------------------------------------
 void service_launch_threads(int argc, char *argv[], pid_t m_pid) {
     //--------------------------------------------
-    // Get main process id
+    // Check if already running
     //--------------------------------------------
-    //pid_t m_pid = getpid();
+    if (check_service_running(m_pid)) {
+        printf("Already running a service instance!\n");
+        return;
+    }
     //--------------------------------------------
     // Start msg
     //--------------------------------------------
