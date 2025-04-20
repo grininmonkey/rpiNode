@@ -43,7 +43,7 @@ void* (*service_thread_functions[NUM_SERVICE_THREADS])(void*) = {
 //---------------------------------------------------------------
 void service_launch_threads(int argc, char *argv[], pid_t m_pid) {
     //--------------------------------------------
-    // Check if already running
+    // Check if already running service instance
     //--------------------------------------------
     if (check_service_running(m_pid)) {
         printf("Already running a service instance!\n");

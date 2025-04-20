@@ -12,6 +12,7 @@ typedef struct {
     int http;
     int mDNS;
     int master;
+    int serveMQ;
     int useTmpfs;
     int saveToDB;
     int httpPort;

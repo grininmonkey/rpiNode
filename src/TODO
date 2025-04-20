@@ -1,0 +1,20 @@
+
+update mDnsPublishService:
+    add input to specify http/mq service to publish
+    update http thread for new func input
+
+#####################################################################
+
+update config for mDNS:
+    add: mDNSPublishHttp
+    add: mDNSPublishMQ
+    current mDNS should mean no mDNS scanning or publishing.
+
+    Update http, mDNS and MQ threads
+
+#####################################################################
+
+Add utility similar to verboes for error logging to /var/log/rpiNode and use logroate ?
+Debating rather or not to rely solely on journal, if creating own erro logs... easier
+to export for cluster management etc?
+

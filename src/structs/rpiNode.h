@@ -21,6 +21,9 @@
     } while(0)
 
 // Base
+#define MDNS_SERVICE_TYPE_HTTP "_rpinode._tcp"
+#define MDNS_SERVICE_TYPE_MQ "_rpinodemq._tcp"
+
 #define RPI_CONFIG_FILE "/etc/rpiNode/config.json"
 #define RPI_CONFIG_SERVE_PATH "/srv/rpiNode"
 #define RPI_MAX_TAGS 1000               // Max number of Data Tags

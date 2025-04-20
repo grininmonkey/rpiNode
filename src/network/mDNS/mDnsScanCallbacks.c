@@ -23,7 +23,7 @@ void resolve_callback(AvahiServiceResolver *r,
     if (event == AVAHI_RESOLVER_FOUND) {
         char addr[AVAHI_ADDRESS_STR_MAX];
         avahi_address_snprint(addr, sizeof(addr), address);
-        //printf("%s - %s - %i\n", name, addr, port);
+        printf("%s - %s - %s - %i\n", type, name, addr, port);
         if (strcmp(addr, "127.0.0.1") != 0 && strcmp(addr, "::1") != 0)
             add_service(name, host_name, addr, port);
     }

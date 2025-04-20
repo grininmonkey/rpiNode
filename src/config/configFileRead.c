@@ -27,6 +27,7 @@ int config_file_read(pid_t pid) {
     json_t *http = json_object_get(root, "http");
     json_t *mDNS = json_object_get(root, "mDNS");
     json_t *master = json_object_get(root, "master");
+    json_t *serveMQ = json_object_get(root, "serveMQ");
     json_t *saveToDB = json_object_get(root, "saveToDB");
     json_t *httpPort = json_object_get(root, "httpPort");
     json_t *useTmpfs = json_object_get(root, "useTmpfs");
@@ -54,6 +55,7 @@ int config_file_read(pid_t pid) {
     rpiNode.config.http = get_true_false(rpiNode.config.http, http);
     rpiNode.config.mDNS = get_true_false(rpiNode.config.mDNS, mDNS); 
     rpiNode.config.master = get_true_false(rpiNode.config.master, master);
+    rpiNode.config.serveMQ = get_true_false(rpiNode.config.serveMQ, serveMQ);
     rpiNode.config.useTmpfs = get_true_false(rpiNode.config.useTmpfs, useTmpfs);
     rpiNode.config.saveToDB = get_true_false(rpiNode.config.saveToDB, saveToDB);
     rpiNode.config.httpPort = get_integer(rpiNode.config.httpPort, httpPort);

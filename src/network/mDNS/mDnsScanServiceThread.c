@@ -11,7 +11,6 @@
 #include "../../utils/verbosePrintf.h"
 #include "mDnsScanCallbacks.h"
 
-#define SERVICE_TYPE "_rpinode._tcp"
 
 void* mdns_scan_service_thread(void *arg) {
     //--------------------------------------------------------------------------
@@ -27,11 +26,13 @@ void* mdns_scan_service_thread(void *arg) {
     int error;
     pid_t t_pid = syscall(SYS_gettid);
     AvahiClient *client;
-    AvahiServiceBrowser *sb;
+    AvahiServiceBrowser *sb, *sbmq;
 
     // stdout Notification
     verbose_mutex_printf("[mDNS][%d]: Started\n", t_pid);
-
+    //--------------------------------------------------------------------------
+    // Lock mutex
+    //--------------------------------------------------------------------------
     pthread_mutex_lock(&lock);
     //--------------------------------------------------------------------------
     // Create Poll
@@ -53,16 +54,27 @@ void* mdns_scan_service_thread(void *arg) {
         return NULL;
     }
     //--------------------------------------------------------------------------
-    //  Create Browser
+    //  Create Browser(s)
     //--------------------------------------------------------------------------
     sb = avahi_service_browser_new(
         client, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC,
-        SERVICE_TYPE, NULL, 0, browse_callback, client
+        MDNS_SERVICE_TYPE_HTTP, NULL, 0, browse_callback, client
     );
     if (!sb) {
         fprintf(stderr, "[mDNS][%d]: Failed to create browser: %s\n", t_pid, avahi_strerror(avahi_client_errno(client)));
         return NULL;
     }
+    sbmq = avahi_service_browser_new(
+        client, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC,
+        MDNS_SERVICE_TYPE_MQ, NULL, 0, browse_callback, client
+    );
+    if (!sbmq) {
+        fprintf(stderr, "[mDNS][%d]: Failed to create browser: %s\n", t_pid, avahi_strerror(avahi_client_errno(client)));
+        return NULL;
+    }    
+    //--------------------------------------------------------------------------
+    // Unlock mutex
+    //--------------------------------------------------------------------------    
     pthread_mutex_unlock(&lock);
 
     avahi_simple_poll_loop(simple_poll);

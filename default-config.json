@@ -5,6 +5,7 @@
     "httpPort": 80,
     "mDNS": 1,
     "master": 0,
+    "serveMQ": 1,
     "saveToDB": 0,
     "currentValuesDBName": "current",
     "currentValuesViewName": "vValues",

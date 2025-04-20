@@ -11,6 +11,7 @@ void config_file_completed(pid_t pid) {
         printf("[main][%d]:\t\t# http: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.http));
         printf("[main][%d]:\t\t# mDNS: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.mDNS));
         printf("[main][%d]:\t\t# master: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.master));
+        printf("[main][%d]:\t\t# serveMQ: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.serveMQ));
         printf("[main][%d]:\t\t# saveToDB: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.saveToDB));
         printf("[main][%d]:\t\t# useTmpfs: %s\n", pid, INT_TRUE_FALSE_STR(rpiNode.config.useTmpfs));
         printf("[main][%d]:\t\t# httpPort: %i\n", pid, rpiNode.config.httpPort);
