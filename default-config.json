@@ -20,7 +20,7 @@
         {
             "moduleId": 1000,
             "tagPathName": "EXAMPLE",
-            "start": 0,
+            "start": 1,
             "verbose": 1,
             "threadSleepMilliseconds": 500,
             "components": [
